@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Navbar from "@/components/heropage/Navbar";
+
 const Menu = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
 
