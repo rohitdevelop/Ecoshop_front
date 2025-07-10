@@ -10,118 +10,64 @@ import "swiper/css/navigation";
 const Home = () => {
   const [favorites, setFavorites] = useState([]);
 
-  const categories = [
-    {
-      id: 1,
-      name: "Home & Kitchen",
-      description: "Eco-friendly household essentials",
-      products: [
-        {
-          id: 101,
-          name: "Kitchen Towels",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 102,
-          name: "Compost Bin",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 103,
-          name: "Bamboo Utensils",
-          image: "https://via.placeholder.com/400x300",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Personal & Body Care",
-      description: "Natural and reusable personal items",
-      products: [
-        {
-          id: 201,
-          name: "Bamboo Toothbrush",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 202,
-          name: "Organic Soap",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 203,
-          name: "Natural Shampoo Bar",
-          image: "https://via.placeholder.com/400x300",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Eco-Friendly Gifting & Lifestyle",
-      description: "Sustainable gifts and lifestyle products",
-      products: [
-        {
-          id: 301,
-          name: "Plantable Notebooks",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 302,
-          name: "Upcycled Bags",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 303,
-          name: "Coconut Bowl Gift Set",
-          image: "https://via.placeholder.com/400x300",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Travel Essentials",
-      description: "Sustainable and compact travel-friendly products",
-      products: [
-        {
-          id: 401,
-          name: "Steel Straws",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 402,
-          name: "Eco Travel Kit",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 403,
-          name: "Collapsible Bottles",
-          image: "https://via.placeholder.com/400x300",
-        },
-      ],
-    },
-    {
-      id: 5,
-      name: "Kids & Baby Care",
-      description: "Safe and eco-conscious products for kids",
-      products: [
-        {
-          id: 501,
-          name: "Organic Baby Wipes",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 502,
-          name: "Cloth Diapers",
-          image: "https://via.placeholder.com/400x300",
-        },
-        {
-          id: 503,
-          name: "Wooden Toys",
-          image: "https://via.placeholder.com/400x300",
-        },
-      ],
-    },
-  ];
+const categories = [
+  {
+    id: 1,
+    name: "Home & Kitchen",
+    slug: "home", // matches with 'home' in your /products page
+    description: "Eco-friendly household essentials",
+    products: [
+      { id: 101, name: "Kitchen Towels", image: "https://via.placeholder.com/400x300" },
+      { id: 102, name: "Compost Bin", image: "https://via.placeholder.com/400x300" },
+      { id: 103, name: "Bamboo Utensils", image: "https://via.placeholder.com/400x300" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Personal & Body Care",
+    slug: "bodycare", // exact match with your products page category
+    description: "Natural and reusable personal items",
+    products: [
+      { id: 201, name: "Bamboo Toothbrush", image: "https://via.placeholder.com/400x300" },
+      { id: 202, name: "Organic Soap", image: "https://via.placeholder.com/400x300" },
+      { id: 203, name: "Natural Shampoo Bar", image: "https://via.placeholder.com/400x300" },
+    ],
+  },
+  {
+    id: 3,
+    name: "Eco-Friendly Gifting & Lifestyle",
+    slug: "lifestyle", // matches with products page
+    description: "Sustainable gifts and lifestyle products",
+    products: [
+      { id: 301, name: "Plantable Notebooks", image: "https://via.placeholder.com/400x300" },
+      { id: 302, name: "Upcycled Bags", image: "https://via.placeholder.com/400x300" },
+      { id: 303, name: "Coconut Bowl Gift Set", image: "https://via.placeholder.com/400x300" },
+    ],
+  },
+  {
+    id: 4,
+    name: "Travel Essentials",
+    slug: "travel essentials", // already working correctly
+    description: "Sustainable and compact travel-friendly products",
+    products: [
+      { id: 401, name: "Steel Straws", image: "https://via.placeholder.com/400x300" },
+      { id: 402, name: "Eco Travel Kit", image: "https://via.placeholder.com/400x300" },
+      { id: 403, name: "Collapsible Bottles", image: "https://via.placeholder.com/400x300" },
+    ],
+  },
+  {
+    id: 5,
+    name: "Kids & Baby Care",
+    slug: "kids", // exact match with product page
+    description: "Safe and eco-conscious products for kids",
+    products: [
+      { id: 501, name: "Organic Baby Wipes", image: "https://via.placeholder.com/400x300" },
+      { id: 502, name: "Cloth Diapers", image: "https://via.placeholder.com/400x300" },
+      { id: 503, name: "Wooden Toys", image: "https://via.placeholder.com/400x300" },
+    ],
+  },
+];
+
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -182,7 +128,7 @@ const Home = () => {
             care, and gifting.
           </p>
           <Link
-            href="/menu"
+            href="/Products"
             className="bg-green-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-600 transition-all shadow-lg"
           >
             Shop Now
@@ -222,7 +168,7 @@ const Home = () => {
                       </h3>
                       <div className="flex justify-between items-center">
                         <Link
-                          href="/menu"
+                           href={`/Products?category=${encodeURIComponent(category.slug)}`}
                           className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-all"
                         >
                           Explore Now
@@ -247,39 +193,36 @@ const Home = () => {
           </div>
         ))}
         {/* CTA Section */}
-     <div className="bg-gradient-to-br from-green-800 via-green-600 to-green-300 py-5 mb-5 text-center rounded-2xl">
-  <div className="max-w-xl mx-auto flex flex-col items-center">
-    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 drop-shadow-lg">
-      Join the Eco-Friendly Movement
-    </h2>
-    <p className="text-base sm:text-lg text-green-100 mb-6 leading-relaxed">
-      Explore sustainable, reusable, and natural products for everyday life.
-    </p>
+        <div className="bg-gradient-to-br from-green-800 via-green-600 to-green-300 py-5 mb-5 text-center rounded-2xl">
+          <div className="max-w-xl mx-auto flex flex-col items-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 drop-shadow-lg">
+              Join the Eco-Friendly Movement
+            </h2>
+            <p className="text-base sm:text-lg text-green-100 mb-6 leading-relaxed">
+              Explore sustainable, reusable, and natural products for everyday
+              life.
+            </p>
 
-    <img
-      src="https://storage.googleapis.com/gweb-cloudblog-publish/original_images/19662_E_waste_ChromeOS_Flex_Blog_Header_01_1.gif"
-      alt="Eco Movement"
-      className="w-full max-w-md rounded-lg shadow-md mb-6"
-    />
+            <img
+              src="https://storage.googleapis.com/gweb-cloudblog-publish/original_images/19662_E_waste_ChromeOS_Flex_Blog_Header_01_1.gif"
+              alt="Eco Movement"
+              className="w-full max-w-md rounded-lg shadow-md mb-6"
+            />
 
-    <Link
-      href="/menu"
-      className="inline-block bg-yellow-400 text-green-900 px-6 py-3 rounded-full font-semibold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md"
-    >
-      🌿 Explore Products
-    </Link>
-  </div>
-</div>
-
-
-
-        
-      </div>
-        <footer>
-          <div className="">
-            <Footer />
+            <Link
+              href="/Products"
+              className="inline-block bg-yellow-400 text-green-900 px-6 py-3 rounded-full font-semibold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md"
+            >
+              🌿 Explore Products
+            </Link>
           </div>
-        </footer>
+        </div>
+      </div>
+      <footer>
+        <div className="">
+          <Footer />
+        </div>
+      </footer>
     </div>
   );
 };

@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Navbar from "@/components/heropage/Navbar";
 
-const Menu = () => {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+const Products = () => {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
 
-  // Category names
   const categoriesList = [
     "skincare",
     "makeup",
@@ -17,7 +18,25 @@ const Menu = () => {
     "kids",
   ];
 
-  // 8 products per category
+  const categories = ["all", ...categoriesList];
+
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const router = useRouter();
+
+  const handleCategoryClick = (cat) => {
+    setSelectedCategory(cat);
+    router.push(`/Products?category=${encodeURIComponent(cat)}`);
+  };
+
+  // Set selected category from URL
+  useEffect(() => {
+    if (categoryParam && categoriesList.includes(categoryParam.toLowerCase())) {
+      setSelectedCategory(categoryParam.toLowerCase());
+    }
+  }, [categoryParam]);
+
+  // Mock product list
   const products = categoriesList.flatMap((category, catIndex) =>
     Array.from({ length: 8 }, (_, i) => ({
       id: `${category}-${i + 1}`,
@@ -37,12 +56,10 @@ const Menu = () => {
       ? products
       : products.filter((product) => product.category === selectedCategory);
 
-  const categories = ["all", ...categoriesList];
-
   return (
     <>
       <Navbar />
-      <div className="bg-white text-gray-800 py-12 px-4 sm:px-6 overflow-x-hidden">
+      <div className="bg-white text-gray-800 py-12 px-4 sm:px-6 overflow-x-hidden pt-24">
         {/* Title */}
         <h1 className="text-4xl font-bold text-green-900 text-center mb-8">
           Our Beauty Products
@@ -50,18 +67,17 @@ const Menu = () => {
 
         {/* Category Filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((category) => (
+          {categories.map((cat) => (
             <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full font-semibold transition-all text-sm sm:text-base
-            ${
-              selectedCategory === category
-                ? "bg-yellow-400 text-green-900"
-                : "bg-green-100 text-green-700 hover:bg-green-200"
-            }`}
+              key={cat}
+              onClick={() => handleCategoryClick(cat)}
+              className={`px-4 py-2 rounded-full font-semibold transition-all text-sm sm:text-base ${
+                selectedCategory === cat
+                  ? "bg-yellow-400 text-green-900"
+                  : "bg-green-100 text-green-700 hover:bg-green-200"
+              }`}
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
         </div>
@@ -102,4 +118,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default Products;
