@@ -1,6 +1,6 @@
 import React from 'react'
-import Footer from "@/components/heropage/Footer";
-import Navbar from "@/components/heropage/Navbar";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
 
 const page = () => {
   return (

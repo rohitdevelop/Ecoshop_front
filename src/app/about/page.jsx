@@ -1,11 +1,11 @@
 import Image from "next/image";
-import Navbar from "@/components/heropage/Navbar";
-
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 export default function AboutPage() {
   return (
     <>
     <Navbar />
-    <div className="bg-white text-green-900 min-h-screen pt-20">
+    <div className="bg-white text-green-900 min-h-screen ">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-100 to-green-200 py-16 px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-green-800">
@@ -69,6 +69,7 @@ export default function AboutPage() {
         </a>
       </section>
     </div>
+    <Footer/>
                 </>
   );
 }

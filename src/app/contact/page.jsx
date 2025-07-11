@@ -1,11 +1,11 @@
-import Navbar from "@/components/heropage/Navbar";
-import Footer from "@/components/heropage/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function ContactPage() {
   return (
     <>
     <Navbar />
-    <div className="bg-white text-green-900 pt-20 min-h-screen">
+    <div className="bg-white text-green-900  min-h-screen">
       {/* Hero Section */}
       <section className="bg-green-100 text-center py-12 px-4">
         <h1 className="text-4xl font-bold mb-2">📞 Contact Us</h1>

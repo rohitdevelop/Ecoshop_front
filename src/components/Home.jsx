@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
-import Footer from "@/components/heropage/Footer";
+import Footer from "@/components/Footer";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -78,7 +78,7 @@ const categories = [
   return (
     <div className="bg-gray-50 text-gray-800">
       {/* Hero Section */}
-      <div className="relative w-[90vw] max-w-7xl mx-auto h-[300px] sm:h-[400px] md:h-[500px] md:py-24 pt-10 mt-16 md:mt-0 flex justify-center items-center">
+      <div className="relative w-[90vw] max-w-7xl mx-auto h-[300px] sm:h-[400px] md:h-[500px]  pt-10 mt-16 md:mt-0 flex justify-center items-center">
         <Swiper
           spaceBetween={0}
           slidesPerView={1}
@@ -128,7 +128,7 @@ const categories = [
             care, and gifting.
           </p>
           <Link
-            href="/Products"
+            href="/products"
             className="bg-green-500 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-600 transition-all shadow-lg"
           >
             Shop Now
@@ -137,7 +137,7 @@ const categories = [
       </div>
 
       {/* Categories Section */}
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 pt-5">
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-center text-green-800 capitalize">
             Explore Our Categories
@@ -168,7 +168,7 @@ const categories = [
                       </h3>
                       <div className="flex justify-between items-center">
                         <Link
-                           href={`/Products?category=${encodeURIComponent(category.slug)}`}
+                           href={`/products?category=${encodeURIComponent(category.slug)}`}
                           className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-all"
                         >
                           Explore Now
@@ -210,7 +210,7 @@ const categories = [
             />
 
             <Link
-              href="/Products"
+              href="/products"
               className="inline-block bg-yellow-400 text-green-900 px-6 py-3 rounded-full font-semibold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md"
             >
               🌿 Explore Products

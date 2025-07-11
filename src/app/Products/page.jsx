@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Navbar from "@/components/heropage/Navbar";
+import Navbar from "@/components/Navbar";
 
 const Products = () => {
   const searchParams = useSearchParams();
@@ -26,7 +26,7 @@ const Products = () => {
 
   const handleCategoryClick = (cat) => {
     setSelectedCategory(cat);
-    router.push(`/Products?category=${encodeURIComponent(cat)}`);
+    router.push(`/products?category=${encodeURIComponent(cat)}`);
   };
 
   // Set selected category from URL
@@ -59,7 +59,7 @@ const Products = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white text-gray-800 py-12 px-4 sm:px-6 overflow-x-hidden pt-24">
+      <div className="bg-white text-gray-800 py-5 px-4 sm:px-6 overflow-x-hidden ">
         {/* Title */}
         <h1 className="text-4xl font-bold text-green-900 text-center mb-8">
           Our Beauty Products
