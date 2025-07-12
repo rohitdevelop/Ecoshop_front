@@ -1,22 +1,26 @@
 // src/app/layout.js
-
-import './globals.css';
-import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import "./globals.css";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { LikeProvider } from "@/Context/LikeContext";
+
 export const metadata = {
-  title: 'EcoShop',
-  description: 'Eco-Friendly E-Commerce Website',
+  title: "EcoShop",
+  description: "Eco-Friendly E-Commerce Website",
 };
 
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <head>
-          <title>{metadata.title}</title>
-          <meta name="description" content={metadata.description} />
-        </head>
         <body className="antialiased">
+          {/* Optional header - you can move this into a Navbar component */}
           <header className="flex justify-end items-center p-4 gap-4 h-16">
             <SignedOut>
               <SignInButton />
@@ -30,7 +34,9 @@ export default function RootLayout({ children }) {
               <UserButton />
             </SignedIn>
           </header>
-           <LikeProvider>{children}</LikeProvider>
+
+          {/* Like context wrapper */}
+          <LikeProvider>{children}</LikeProvider>
         </body>
       </html>
     </ClerkProvider>
