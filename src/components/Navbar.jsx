@@ -47,22 +47,30 @@ const Navbar = () => {
 
         {/* Right Side - Icons and Auth */}
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/wishlist" className="text-green-700 hover:text-green-900 text-xl">
+          <Link
+            href="/wishlist"
+            className="text-green-700 hover:text-green-900 text-xl"
+          >
             <FiHeart />
           </Link>
-          <Link href="/cart" className="text-green-700 hover:text-green-900 text-xl">
+          <Link
+            href="/cart"
+            className="text-green-700 hover:text-green-900 text-xl"
+          >
             <FiShoppingCart />
           </Link>
 
           <SignedOut>
-            <SignInButton mode="modal">
-              <button className="text-green-700 font-medium hover:underline">Login</button>
-            </SignInButton>
-            <SignUpButton mode="modal">
+            <Link href="/login">
+              <button className="text-green-700 font-medium hover:underline">
+                Login
+              </button>
+            </Link>
+            <Link href="/signup">
               <button className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-all">
                 Sign Up
               </button>
-            </SignUpButton>
+            </Link>
           </SignedOut>
 
           <SignedIn>
@@ -71,7 +79,10 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setIsOpen(!isOpen)} className="text-green-700 md:hidden text-2xl">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="text-green-700 md:hidden text-2xl"
+        >
           {isOpen ? <FiX /> : <FiMenu />}
         </button>
       </div>
@@ -101,21 +112,23 @@ const Navbar = () => {
             </div>
 
             <SignedOut>
-              <SignInButton mode="modal">
-                <button className="border border-green-700 text-green-700 px-4 py-1 rounded hover:bg-green-100">
+              <Link href="/login">
+                <button className="text-green-700 font-medium hover:underline">
                   Login
                 </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">
+              </Link>
+              <Link href="/signup">
+                <button className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-all">
                   Sign Up
                 </button>
-              </SignUpButton>
+              </Link>
             </SignedOut>
 
             <SignedIn>
               <UserButton afterSignOutUrl="/" />
-              <p className="text-sm text-gray-700">{user?.primaryEmailAddress?.emailAddress}</p>
+              <p className="text-sm text-gray-700">
+                {user?.primaryEmailAddress?.emailAddress}
+              </p>
             </SignedIn>
           </div>
         </div>
@@ -130,7 +143,9 @@ const NavLink = ({ href, children, isActive, onClick }) => {
       href={href}
       onClick={onClick}
       className={`text-base font-medium ${
-        isActive ? "text-green-700 underline" : "text-gray-600 hover:text-green-700"
+        isActive
+          ? "text-green-700 underline"
+          : "text-gray-600 hover:text-green-700"
       } transition-all`}
     >
       {children}
