@@ -8,8 +8,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import { LikeProvider } from "@/Context/LikeContext";
-
+import Navbar from "@/components/Navbar";
 export const metadata = {
   title: "EcoShop",
   description: "Eco-Friendly E-Commerce Website",
@@ -34,9 +33,8 @@ export default function RootLayout({ children }) {
               <UserButton />
             </SignedIn>
           </header>
-
-          {/* Like context wrapper */}
-          <LikeProvider>{children}</LikeProvider>
+          <Navbar />
+        {children}
         </body>
       </html>
     </ClerkProvider>
