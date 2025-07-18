@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiMenu, FiX, FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FiMenu, FiX, FiHeart, FiShoppingCart, FiSettings } from "react-icons/fi";
 import {
   SignedIn,
   SignedOut,
@@ -14,8 +14,12 @@ import {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
+  const Rohit = usePathname();
   const { user } = useUser();
+
+  // Check if user is admin (you can customize this logic)
+  const isAdmin = user?.publicMetadata?.role === 'admin' || 
+                  user?.primaryEmailAddress?.emailAddress === 'rohitdev124421@gmail.com';
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -38,11 +42,24 @@ const Navbar = () => {
             <NavLink
               key={link.name}
               href={link.href}
-              isActive={pathname === link.href}
+              isActive={Rohit === link.href}
             >
               {link.name}
             </NavLink>
           ))}
+          
+          {/* Admin Link - Only visible to admin users */}
+          {isAdmin && (
+            <NavLink
+              href="/admin"
+              isActive={Rohit === '/admin'}
+            >
+              <div className="flex items-center">
+                <FiSettings className="mr-1" size={16} />
+                Admin
+              </div>
+            </NavLink>
+          )}
         </div>
 
         {/* Right Side - Icons and Auth */}
@@ -95,12 +112,26 @@ const Navbar = () => {
               <NavLink
                 key={link.name}
                 href={link.href}
-                isActive={pathname === link.href}
+                isActive={Rohit === link.href}
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </NavLink>
             ))}
+
+            {/* Admin Link - Mobile */}
+            {isAdmin && (
+              <NavLink
+                href="/admin"
+                isActive={Rohit === '/admin'}
+                onClick={() => setIsOpen(false)}
+              >
+                <div className="flex items-center">
+                  <FiSettings className="mr-1" size={16} />
+                  Admin Panel
+                </div>
+              </NavLink>
+            )}
 
             <div className="flex gap-4 items-center">
               <Link href="/wishlist" className="text-xl">
@@ -129,6 +160,9 @@ const Navbar = () => {
               <p className="text-sm text-gray-700">
                 {user?.primaryEmailAddress?.emailAddress}
               </p>
+              {isAdmin && (
+                <p className="text-xs text-green-600 font-medium">Admin User</p>
+              )}
             </SignedIn>
           </div>
         </div>

@@ -1,35 +1,26 @@
 "use client";
-import React from "react";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
-import { useLike } from "@/Context/LikeContext"; // ✅ make sure path is correct
+import React, {useEffect} from "react";
+import { useUser } from "@clerk/nextjs"; // or your auth hook
+import { useRouter } from "next/navigation";
+ import Footer from "@/components/Footer";
 
 const Wishlist = () => {
-  const { likedItems } = useLike();
+  const { isSignedIn, user } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.push("/signup"); // redirect to login if not signed in
+    }
+  }, [isSignedIn, router]);
+
+  if (!isSignedIn) return null; // or loading spinner
 
   return (
     <div>
-      <Navbar />
-      <div className="p-8 min-h-screen">
-        <h2 className="text-3xl font-bold mb-4">❤️ Your Wishlist</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {likedItems.length === 0 ? (
-            <p className="text-gray-500 italic">No items in wishlist.</p>
-          ) : (
-            likedItems.map((item) => (
-              <div key={item.id} className="border p-4 rounded shadow">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-40 object-cover rounded"
-                />
-                <h3 className="mt-2 font-semibold">{item.name}</h3>
-                <p className="text-green-700 font-medium">{item.price}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      
+      <h1 className="text-3xl text-center my-6">Hello, {user?.firstName}'s Wishlist</h1>
+      {/* Show wishlist items here */}
       <Footer />
     </div>
   );

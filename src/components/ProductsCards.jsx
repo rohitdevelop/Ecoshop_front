@@ -9,6 +9,9 @@
       <h3 className="text-lg font-semibold mt-2 text-green-800">
         {product.title}
       </h3>
+      <h3 className="text-lg font-semibold mt-2 text-green-800">
+        {product.description}
+      </h3>
       <p className="text-gray-600">{product.price}$</p>
 
       <button className="mt-auto bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">

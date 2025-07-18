@@ -10,64 +10,68 @@ import "swiper/css/navigation";
 const Home = () => {
   const [favorites, setFavorites] = useState([]);
 
-const categories = [
-  {
-    id: 1,
-    name: "Home & Kitchen",
-    slug: "home", // matches with 'home' in your /products page
-    description: "Eco-friendly household essentials",
-    products: [
-      { id: 101, name: "Kitchen Towels", image: "https://via.placeholder.com/400x300" },
-      { id: 102, name: "Compost Bin", image: "https://via.placeholder.com/400x300" },
-      { id: 103, name: "Bamboo Utensils", image: "https://via.placeholder.com/400x300" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Personal & Body Care",
-    slug: "bodycare", // exact match with your products page category
-    description: "Natural and reusable personal items",
-    products: [
-      { id: 201, name: "Bamboo Toothbrush", image: "https://via.placeholder.com/400x300" },
-      { id: 202, name: "Organic Soap", image: "https://via.placeholder.com/400x300" },
-      { id: 203, name: "Natural Shampoo Bar", image: "https://via.placeholder.com/400x300" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Eco-Friendly Gifting & Lifestyle",
-    slug: "lifestyle", // matches with products page
-    description: "Sustainable gifts and lifestyle products",
-    products: [
-      { id: 301, name: "Plantable Notebooks", image: "https://via.placeholder.com/400x300" },
-      { id: 302, name: "Upcycled Bags", image: "https://via.placeholder.com/400x300" },
-      { id: 303, name: "Coconut Bowl Gift Set", image: "https://via.placeholder.com/400x300" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Travel Essentials",
-    slug: "travel essentials", // already working correctly
-    description: "Sustainable and compact travel-friendly products",
-    products: [
-      { id: 401, name: "Steel Straws", image: "https://via.placeholder.com/400x300" },
-      { id: 402, name: "Eco Travel Kit", image: "https://via.placeholder.com/400x300" },
-      { id: 403, name: "Collapsible Bottles", image: "https://via.placeholder.com/400x300" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Kids & Baby Care",
-    slug: "kids", // exact match with product page
-    description: "Safe and eco-conscious products for kids",
-    products: [
-      { id: 501, name: "Organic Baby Wipes", image: "https://via.placeholder.com/400x300" },
-      { id: 502, name: "Cloth Diapers", image: "https://via.placeholder.com/400x300" },
-      { id: 503, name: "Wooden Toys", image: "https://via.placeholder.com/400x300" },
-    ],
-  },
-];
-
+  const categories = [
+    {
+      id: 1,
+      name: "Home & Kitchen",
+      slug: "home",
+      description: "Eco-friendly household essentials",
+      products: [
+        { id: 101, name: "Kitchen Towels", image: "https://via.placeholder.com/400x300" },
+        { id: 102, name: "Compost Bin", image: "https://via.placeholder.com/400x300" },
+        { id: 103, name: "Bamboo Utensils", image: "https://via.placeholder.com/400x300" },
+        { id: 104, name: "Bamboo Utensils", image: "https://via.placeholder.com/400x300" },
+      ],
+    },
+    {
+      id: 2,
+      name: "Personal & Body Care",
+      slug: "bodycare",
+      description: "Natural and reusable personal items",
+      products: [
+        { id: 201, name: "Bamboo Toothbrush", image: "https://via.placeholder.com/400x300" },
+        { id: 202, name: "Organic Soap", image: "https://via.placeholder.com/400x300" },
+        { id: 203, name: "Natural Shampoo Bar", image: "https://via.placeholder.com/400x300" },
+        { id: 204, name: "Natural Shampoo Bar", image: "https://via.placeholder.com/400x300" },
+      ],
+    },
+    {
+      id: 3,
+      name: "Eco-Friendly Gifting & Lifestyle",
+      slug: "lifestyle",
+      description: "Sustainable gifts and lifestyle products",
+      products: [
+        { id: 301, name: "Plantable Notebooks", image: "https://via.placeholder.com/400x300" },
+        { id: 302, name: "Upcycled Bags", image: "https://via.placeholder.com/400x300" },
+        { id: 303, name: "Coconut Bowl Gift Set", image: "https://via.placeholder.com/400x300" },
+        { id: 304, name: "Coconut Bowl Gift Set", image: "https://via.placeholder.com/400x300" },
+      ],
+    },
+    {
+      id: 4,
+      name: "Travel Essentials",
+      slug: "travel essentials",
+      description: "Sustainable and compact travel-friendly products",
+      products: [
+        { id: 401, name: "Steel Straws", image: "https://via.placeholder.com/400x300" },
+        { id: 402, name: "Eco Travel Kit", image: "https://via.placeholder.com/400x300" },
+        { id: 403, name: "Collapsible Bottles", image: "https://via.placeholder.com/400x300" },
+        { id: 404, name: "Collapsible Bottles", image: "https://via.placeholder.com/400x300" },
+      ],
+    },
+    {
+      id: 5,
+      name: "Kids & Baby Care",
+      slug: "kids",
+      description: "Safe and eco-conscious products for kids",
+      products: [
+        { id: 501, name: "Organic Baby Wipes", image: "https://via.placeholder.com/400x300" },
+        { id: 502, name: "Cloth Diapers", image: "https://via.placeholder.com/400x300" },
+        { id: 503, name: "Wooden Toys", image: "https://via.placeholder.com/400x300" },
+        { id: 504, name: "Wooden Toys", image: "https://via.placeholder.com/400x300" },
+      ],
+    },
+  ];
 
   const toggleFavorite = (id) => {
     setFavorites((prev) =>
@@ -76,9 +80,9 @@ const categories = [
   };
 
   return (
-    <div className="bg-gray-50 text-gray-800">
-      {/* Hero Section */}
-      <div className="relative w-[90vw] max-w-7xl mx-auto h-[300px] sm:h-[400px] md:h-[500px]  pt-10 mt-16 md:mt-0 flex justify-center items-center">
+    <div className="bg-gray-50 text-gray-900">
+      {/* Hero Slider */}
+     <div className="relative w-[90vw] max-w-7xl mx-auto h-[300px] sm:h-[400px] md:h-[500px]  pt-10 md:mt-0 flex justify-center items-center">
         <Swiper
           spaceBetween={0}
           slidesPerView={1}
@@ -136,93 +140,69 @@ const categories = [
         </div>
       </div>
 
-      {/* Categories Section */}
-      <div className="container mx-auto px-6 pt-5">
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold text-center text-green-800 capitalize">
-            Explore Our Categories
-          </h1>
-        </div>
-        {categories.map((category) => (
-          <div key={category.id} className="mb-20">
-            <h2 className="text-3xl font-bold text-green-700 mb-2">
-              {category.name}
-            </h2>
-            <p className="text-lg text-gray-600 mb-6">{category.description}</p>
+      {/* Categories */}
+      <section className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="text-4xl font-bold text-center text-green-800 mb-10">Explore Categories</h2>
 
-            <div className="overflow-x-auto scrollbar-hide">
-              <div className="flex justify-around items-center gap-16 w-max">
-                {category.products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="min-w-[365px] bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-gray-200"
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-green-800 mb-2">
-                        {product.name}
-                      </h3>
-                      <div className="flex justify-between items-center">
-                        <Link
-                           href={`/products?category=${encodeURIComponent(category.slug)}`}
-                          className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition-all"
-                        >
-                          Explore Now
-                        </Link>
-                        <p
-                          onClick={() => toggleFavorite(product.id)}
-                          className="cursor-pointer text-2xl"
-                          style={{
-                            color: favorites.includes(product.id)
-                              ? "red"
-                              : "gray",
-                          }}
-                        >
-                          {favorites.includes(product.id) ? "❤️" : "🤍"}
-                        </p>
-                      </div>
+        {categories.map((cat) => (
+          <div key={cat.id} className="mb-14">
+            <h3 className="text-2xl font-semibold text-green-700 mb-1">{cat.name}</h3>
+            <p className="text-gray-600 mb-4">{cat.description}</p>
+
+            <div className="flex overflow-x-auto gap-5 scrollbar-hide pb-3">
+              {cat.products.map((prod) => (
+                <div
+                  key={prod.id}
+                  className="min-w-[300px] bg-white rounded-xl border hover:shadow-lg transition-shadow shadow-md overflow-hidden"
+                >
+                  <img src={prod.image} alt={prod.name} className="w-full h-48 object-cover" />
+                  <div className="p-4">
+                    <h4 className="font-semibold text-lg text-green-800">{prod.name}</h4>
+                    <div className="flex justify-between items-center mt-3">
+                      <Link
+                        href={`/products?category=${encodeURIComponent(cat.slug)}`}
+                        className="text-sm bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+                      >
+                        Explore
+                      </Link>
+                      <span
+                        onClick={() => toggleFavorite(prod.id)}
+                        className="cursor-pointer text-xl"
+                        title="Add to favorites"
+                      >
+                        {favorites.includes(prod.id) ? "❤️" : "🤍"}
+                      </span>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         ))}
-        {/* CTA Section */}
-        <div className="bg-gradient-to-br from-green-800 via-green-600 to-green-300 py-5 mb-5 text-center rounded-2xl">
-          <div className="max-w-xl mx-auto flex flex-col items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4 drop-shadow-lg">
-              Join the Eco-Friendly Movement
-            </h2>
-            <p className="text-base sm:text-lg text-green-100 mb-6 leading-relaxed">
-              Explore sustainable, reusable, and natural products for everyday
-              life.
-            </p>
+      </section>
 
-            <img
-              src="https://storage.googleapis.com/gweb-cloudblog-publish/original_images/19662_E_waste_ChromeOS_Flex_Blog_Header_01_1.gif"
-              alt="Eco Movement"
-              className="w-full max-w-md rounded-lg shadow-md mb-6"
-            />
+      {/* Call to Action */}
+      <section className="bg-gradient-to-br from-green-800 via-green-600 to-green-300 py-10 text-center rounded-2xl mx-4 md:mx-auto max-w-5xl mb-10">
+        <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+          Join the Eco Movement
+        </h2>
+        <p className="text-green-100 max-w-xl mx-auto mb-6">
+          Reduce waste. Choose natural. Support sustainability with every purchase.
+        </p>
+        <img
+          src="https://storage.googleapis.com/gweb-cloudblog-publish/original_images/19662_E_waste_ChromeOS_Flex_Blog_Header_01_1.gif"
+          alt="eco banner"
+          className="w-full max-w-md mx-auto rounded-xl mb-6 shadow-lg"
+        />
+        <Link
+          href="/products"
+          className="bg-yellow-400 text-green-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500 transition"
+        >
+          🌿 Explore Now
+        </Link>
+      </section>
 
-            <Link
-              href="/products"
-              className="inline-block bg-yellow-400 text-green-900 px-6 py-3 rounded-full font-semibold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md"
-            >
-              🌿 Explore Products
-            </Link>
-          </div>
-        </div>
-      </div>
-      <footer>
-        <div className="">
-          <Footer />
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
