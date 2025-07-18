@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 
 const Page = () => {
   const { isSignedIn } = useUser();
@@ -19,8 +18,7 @@ const Page = () => {
 
   return (
     <div>
-      <Navbar />
-      <div className="h-screen">
+       <div className="h-screen">
         <div className="text-4xl mt-24 text-center">
           This is the Add to Cart section
         </div>
