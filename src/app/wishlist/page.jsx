@@ -2,8 +2,7 @@
 import React, {useEffect} from "react";
 import { useUser } from "@clerk/nextjs"; // or your auth hook
 import { useRouter } from "next/navigation";
- import Footer from "@/components/Footer";
-
+ 
 const Wishlist = () => {
   const { isSignedIn, user } = useUser();
   const router = useRouter();
@@ -21,8 +20,7 @@ const Wishlist = () => {
       
       <h1 className="text-3xl text-center my-6">Hello, {user?.firstName}'s Wishlist</h1>
       {/* Show wishlist items here */}
-      <Footer />
-    </div>
+      </div>
   );
 };
 

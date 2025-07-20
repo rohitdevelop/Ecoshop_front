@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['storage.googleapis.com'],
+    domains: ["images.unsplash.com", "miro.medium.com", "source.unsplash.com"],
   },
 };
 
 export default nextConfig;
 
+ 

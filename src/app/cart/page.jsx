@@ -2,8 +2,7 @@
 import React, { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import Footer from "@/components/Footer";
-
+ 
 const Page = () => {
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -23,8 +22,7 @@ const Page = () => {
           This is the Add to Cart section
         </div>
       </div>
-      <Footer />
-    </div>
+     </div>
   );
 };
 
