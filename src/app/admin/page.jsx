@@ -162,7 +162,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 mt-20">
       {/* Sidebar */}
       <div className={`${isSidebarOpen ? "w-64" : "w-16"} bg-white shadow-lg transition-all duration-300 flex flex-col relative z-20`}>
         {/* Sidebar Header */}
