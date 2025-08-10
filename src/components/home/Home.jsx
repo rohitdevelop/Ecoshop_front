@@ -1,4 +1,5 @@
 "use client";
+import  Cardhome  from "./Cardhome";
 
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -23,7 +24,7 @@ import {
 import Image from "next/image";
 
 const Home = () => {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState([]); 
   const [cart, setCart] = useState([]);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
@@ -71,155 +72,7 @@ const Home = () => {
     },
   ];
 
-  const categories = [
-    {
-      id: 1,
-      name: "Home & Kitchen",
-      slug: "home",
-      description: "Eco-friendly household essentials for sustainable living",
-      icon: "🏠",
-      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
-      products: [
-        {
-          id: 101,
-          name: "Organic Kitchen Towels",
-          price: 24.99,
-          originalPrice: 34.99,
-          image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=300&fit=crop",
-          rating: 4.8,
-          reviews: 124,
-          badge: "Bestseller",
-          description: "100% organic cotton kitchen towels",
-        },
-        {
-          id: 102,
-          name: "Smart Compost Bin",
-          price: 89.99,
-          image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop",
-          rating: 4.6,
-          reviews: 89,
-          badge: "New",
-          description: "Odor-free composting solution",
-        },
-        {
-          id: 103,
-          name: "Bamboo Utensil Set",
-          price: 19.99,
-          image: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=300&fit=crop",
-          rating: 4.9,
-          reviews: 256,
-          description: "Portable bamboo cutlery set",
-        },
-        {
-          id: 104,
-          name: "Glass Food Containers",
-          price: 45.99,
-          image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop",
-          rating: 4.7,
-          reviews: 167,
-          description: "Airtight glass storage containers",
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: "Personal & Body Care",
-      slug: "bodycare",
-      description: "Natural and organic personal care products",
-      icon: "🌸",
-      image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400&h=300&fit=crop",
-      products: [
-        {
-          id: 201,
-          name: "Bamboo Toothbrush Set",
-          price: 12.99,
-          image: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=400&h=300&fit=crop",
-          rating: 4.5,
-          reviews: 201,
-          description: "Biodegradable bamboo toothbrushes",
-        },
-        {
-          id: 202,
-          name: "Organic Soap Collection",
-          price: 32.99,
-          originalPrice: 42.99,
-          image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop",
-          rating: 4.8,
-          reviews: 145,
-          badge: "Popular",
-          description: "Handcrafted organic soap bars",
-        },
-        {
-          id: 203,
-          name: "Shampoo Bar Trio",
-          price: 28.99,
-          image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
-          rating: 4.7,
-          reviews: 98,
-          description: "Zero-waste shampoo bars",
-        },
-        {
-          id: 204,
-          name: "Natural Deodorant",
-          price: 16.99,
-          image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=300&fit=crop",
-          rating: 4.4,
-          reviews: 76,
-          badge: "New",
-          description: "Aluminum-free natural deodorant",
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Eco-Friendly Gifts",
-      slug: "lifestyle",
-      description: "Sustainable gifts and lifestyle products",
-      icon: "🎁",
-      image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-      products: [
-        {
-          id: 301,
-          name: "Plantable Notebook Set",
-          price: 22.99,
-          image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-          rating: 4.6,
-          reviews: 112,
-          description: "Seed paper notebooks that grow into plants",
-        },
-        {
-          id: 302,
-          name: "Upcycled Tote Bags",
-          price: 35.99,
-          image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
-          rating: 4.8,
-          reviews: 189,
-          badge: "Eco Choice",
-          description: "Stylish bags made from recycled materials",
-        },
-        {
-          id: 303,
-          name: "Coconut Bowl Gift Set",
-          price: 41.99,
-          image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-          rating: 4.7,
-          reviews: 134,
-          description: "Handcrafted coconut bowls with spoons",
-        },
-        {
-          id: 304,
-          name: "Sustainable Candle Collection",
-          price: 54.99,
-          originalPrice: 69.99,
-          image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
-          rating: 4.9,
-          reviews: 203,
-          badge: "Bestseller",
-          description: "Soy wax candles in recycled containers",
-        },
-      ],
-    },
-  ];
+
 
   const features = [
     {
@@ -249,7 +102,7 @@ const Home = () => {
     let interval;
     if (isAutoPlaying) {
       interval = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+        setCurrentSlide((prev) => (prev + 1) % heroSlides.length);  
       }, 5000);
     }
     return () => clearInterval(interval);
@@ -307,92 +160,10 @@ const Home = () => {
     }
   };
 
-  const QuickViewModal = ({ product, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="relative">
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={400}
-            height={256}
-            className="w-full h-64 object-cover rounded-t-2xl"
-            priority
-          />
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-2">
-            {product.name}
-          </h3>
-          <p className="text-gray-600 mb-4">{product.description}</p>
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating)
-                      ? "text-yellow-400 fill-current"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-sm text-gray-600">
-              ({product.reviews} reviews)
-            </span>
-          </div>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-green-600">
-                ${product.price}
-              </span>
-              {product.originalPrice && (
-                <span className="text-lg text-gray-400 line-through">
-                  ${product.originalPrice}
-                </span>
-              )}
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={() => {
-                // Handle explore functionality
-                onClose();
-              }}
-              className="flex-1 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <Eye className="w-4 h-4" />
-              Explore
-            </button>
-            <button
-              onClick={() => toggleFavorite(product.id)}
-              className={`p-3 rounded-lg border transition-colors ${
-                favorites.includes(product.id)
-                  ? "bg-red-50 border-red-200 text-red-600"
-                  : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100"
-              }`}
-            >
-              <Heart
-                className={`w-5 h-5 ${
-                  favorites.includes(product.id) ? "fill-current" : ""
-                }`}
-              />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
 
   return (
-    <div className="bg-white text-gray-900 min-h-screen">
+    <div className="bg-white text-gray-900 min-h-screen">ChevronRight
       {/* Hero Slider */}
       <section className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden bg-gray-900">
         {/* Image Container */}
@@ -536,84 +307,7 @@ const Home = () => {
       </section>
 
       {/* Categories */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4">
-              Explore Our Collections
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover sustainable products that make a positive impact on our planet
-            </p>
-          </div>
-
-          {categories.map((category) => (
-            <div key={category.id} className="mb-12 md:mb-16">
-              <div className="flex items-center justify-between mb-6 md:mb-8">
-                <div className="flex items-center gap-3 md:gap-4">
-                  <span className="text-2xl md:text-3xl">{category.icon}</span>
-                  <div>
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800">
-                      {category.name}
-                    </h3>
-                    <p className="text-gray-600 mt-1 text-sm md:text-base">{category.description}</p>
-                  </div>
-                </div>
-                <button className="hidden md:flex items-center gap-2 text-green-600 hover:text-green-700 font-medium">
-                  View All <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Desktop Grid */}
-              <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {category.products.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    favorites={favorites}
-                    toggleFavorite={toggleFavorite}
-                    setShowQuickView={setShowQuickView}
-                  />
-                ))}
-              </div>
-
-              {/* Mobile Carousel */}
-              <div className="md:hidden relative">
-                <div
-                  ref={(el) => carouselRefs.current[category.id] = el}
-                  className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
-                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                  {category.products.map((product) => (
-                    <div key={product.id} className="flex-shrink-0 w-72 snap-start">
-                      <ProductCard
-                        product={product}
-                        favorites={favorites}
-                        toggleFavorite={toggleFavorite}
-                        setShowQuickView={setShowQuickView}
-                      />
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Mobile Carousel Navigation */}
-                <button
-                  onClick={() => scrollCarousel(category.id, 'left')}
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 z-10"
-                >
-                  <ChevronLeft className="w-5 h-5 text-gray-600" />
-                </button>
-                <button
-                  onClick={() => scrollCarousel(category.id, 'right')}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-full p-2 z-10"
-                >
-                  <ChevronRight className="w-5 h-5 text-gray-600" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+     <Cardhome/>
 
       {/* Newsletter */}
       <section className="py-12 md:py-16 bg-gradient-to-r from-green-600 to-green-800">

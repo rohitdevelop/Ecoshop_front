@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
-import Home from "@/components/Home";
+import Home from "@/components/home/Home";
 import Loder from "@/components/Loader";
 // import Footer from "@/components/Footer";
 
