@@ -1,43 +1,24 @@
 "use client";
 import  Cardhome  from "./Cardhome";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Heart,
-  ShoppingCart,
-  Search,
-  Menu,
-  X,
-  Star,
-  Truck,
+   Truck,
   Shield,
   Leaf,
   Award,
-  Eye,
-  Filter,
   ChevronRight,
   ArrowRight,
   ChevronLeft,
-  Play,
-  Pause
+ 
 } from "lucide-react";
 import Image from "next/image";
 
 const Home = () => {
-  const [favorites, setFavorites] = useState([]); 
-  const [cart, setCart] = useState([]);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [showQuickView, setShowQuickView] = useState(null);
-  
-  // Refs for mobile carousels
-  const carouselRefs = useRef({});
-
-  const heroSlides = [
+   const heroSlides = [
     {
       id: 1,
       image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1920&h=800&fit=crop&crop=center",
@@ -103,7 +84,7 @@ const Home = () => {
     if (isAutoPlaying) {
       interval = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);  
-      }, 5000);
+      }, 4000);
     }
     return () => clearInterval(interval);
   }, [isAutoPlaying, heroSlides.length]);
@@ -133,35 +114,7 @@ const Home = () => {
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
-
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying);
-  };
-
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((fav) => fav !== id) : [...prev, id]
-    );
-  };
-
-  const addToCart = (product) => {
-    setCart((prev) => [...prev, product]);
-  };
-
-  // Mobile carousel scroll functions
-  const scrollCarousel = (categoryId, direction) => {
-    const carousel = carouselRefs.current[categoryId];
-    if (carousel) {
-      const scrollAmount = 300;
-      carousel.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-
-
+ 
   return (
     <div className="bg-white text-gray-900 min-h-screen">ChevronRight
       {/* Hero Slider */}
@@ -191,14 +144,6 @@ const Home = () => {
                   priority={index === 0}
                   sizes="100vw"
                 />
-                
-                {/* Loading Placeholder */}
-                {!imageLoaded[index] && (
-                  <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-                  </div>
-                )}
-                
                 {/* Gradient Overlay */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${slide.overlay}`}></div>
               </div>
@@ -269,19 +214,6 @@ const Home = () => {
             </button>
           ))}
         </div>
-
-        {/* Auto-play Control */}
-        <button
-          onClick={toggleAutoPlay}
-          className="absolute bottom-4 md:bottom-6 right-4 md:right-6 z-20 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-2 md:p-3 rounded-full transition-all hover:scale-110"
-          aria-label={isAutoPlaying ? 'Pause slideshow' : 'Play slideshow'}
-        >
-          {isAutoPlaying ? (
-            <Pause className="w-3 h-3 md:w-4 md:h-4" />
-          ) : (
-            <Play className="w-3 h-3 md:w-4 md:h-4" />
-          )}
-        </button>
       </section>
 
       {/* Features */}
@@ -308,143 +240,10 @@ const Home = () => {
 
       {/* Categories */}
      <Cardhome/>
-
-      {/* Newsletter */}
-      <section className="py-12 md:py-16 bg-gradient-to-r from-green-600 to-green-800">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">
-            Join Our Eco Community
-          </h2>
-          <p className="text-green-100 text-base md:text-lg mb-6 md:mb-8">
-            Get exclusive offers, sustainability tips, and product updates delivered to your inbox
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 bg-white rounded-lg border-none outline-none text-gray-900"
-            />
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-green-900 px-6 py-3 rounded-lg font-medium transition-colors">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Quick View Modal */}
-      {showQuickView && (
-        <QuickViewModal
-          product={showQuickView}
-          onClose={() => setShowQuickView(null)}
-        />
-      )}
-
-      <style jsx>{`
-        @keyframes slideProgress {
-          0% { transform: scaleX(0); }
-          100% { transform: scaleX(1); }
-        }
-        
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+ 
     </div>
   );
 };
-
-// Product Card Component
-const ProductCard = ({ product, favorites, toggleFavorite, setShowQuickView }) => (
-  <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-    <div className="relative overflow-hidden">
-      <Image
-        src={product.image}
-        alt={product.name}
-        width={400}
-        height={192}
-        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-      />
-      {product.badge && (
-        <span className="absolute top-3 left-3 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-          {product.badge}
-        </span>
-      )}
-      <button
-        onClick={() => setShowQuickView(product)}
-        className="absolute top-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all"
-      >
-        <Eye className="w-4 h-4 text-gray-700" />
-      </button>
-      <button
-        onClick={() => toggleFavorite(product.id)}
-        className="absolute bottom-3 right-3 bg-white bg-opacity-90 hover:bg-opacity-100 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all"
-      >
-        <Heart
-          className={`w-4 h-4 ${
-            favorites.includes(product.id)
-              ? "text-red-500 fill-current"
-              : "text-gray-700"
-          }`}
-        />
-      </button>
-    </div>
-
-    <div className="p-5">
-      <h4 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">
-        {product.name}
-      </h4>
-      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-        {product.description}
-      </p>
-
-      <div className="flex items-center gap-2 mb-3">
-        <div className="flex items-center">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-4 h-4 ${
-                i < Math.floor(product.rating)
-                  ? "text-yellow-400 fill-current"
-                  : "text-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-        <span className="text-sm text-gray-600">
-          ({product.reviews})
-        </span>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-green-600">
-            ${product.price}
-          </span>
-          {product.originalPrice && (
-            <span className="text-sm text-gray-400 line-through">
-              ${product.originalPrice}
-            </span>
-          )}
-        </div>
-        <button
-          onClick={() => {
-            // Handle explore functionality
-            console.log('Exploring product:', product.name);
-          }}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium flex items-center gap-2"
-        >
-          <Eye className="w-4 h-4" />
-          Explore
-        </button>
-      </div>
-    </div>
-  </div>
-);
+ 
 
 export default Home;
