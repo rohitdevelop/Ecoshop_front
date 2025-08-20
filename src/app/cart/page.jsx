@@ -2,7 +2,8 @@
 import React, { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
- 
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 const Page = () => {
   const { isSignedIn } = useUser();
   const router = useRouter();
@@ -16,6 +17,8 @@ const Page = () => {
   if (!isSignedIn) return null;
 
   return (
+      <>
+      <Navbar/>
     <div>
        <div className="h-screen">
         <div className="text-4xl mt-24 text-center">
@@ -23,6 +26,8 @@ const Page = () => {
         </div>
       </div>
      </div>
+     <Footer/>
+     </>
   );
 };
 

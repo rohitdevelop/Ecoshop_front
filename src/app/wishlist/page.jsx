@@ -2,6 +2,8 @@
 import React, {useEffect} from "react";
 import { useUser } from "@clerk/nextjs"; // or your auth hook
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
  
 const Wishlist = () => {
   const { isSignedIn, user } = useUser();
@@ -16,11 +18,15 @@ const Wishlist = () => {
   if (!isSignedIn) return null; // or loading spinner
 
   return (
+    <>
+    <Navbar/>
     <div>
       
       <h1 className="text-3xl text-center my-6">Hello, {user?.firstName}'s Wishlist</h1>
       {/* Show wishlist items here */}
       </div>
+    <Footer/>
+    </>
   );
 };
 
