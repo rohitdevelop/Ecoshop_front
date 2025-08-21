@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Home from "@/components/home/Home";
 import Loder from "@/components/Loader";
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ export default function HomePage() {
         <>
           <Navbar />
           <Home />
-          {/* <Footer /> */}
+          <Footer />
         </>
       )}
     </>

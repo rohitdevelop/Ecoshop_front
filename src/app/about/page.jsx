@@ -7,18 +7,12 @@ import {
   Leaf,
   Heart,
   Users,
-  Award,
-  Truck,
-  Shield,
   Recycle,
-  Globe,
-  ArrowRight,
   CheckCircle,
   Star,
   Target,
   Eye,
   TreePine,
-  Factory,
   Handshake,
 } from "lucide-react";
 
@@ -94,27 +88,6 @@ const AboutPage = () => {
     },
   ];
 
-  const values = [
-    {
-      icon: <Eye className="w-12 h-12" />,
-      title: "Our Vision",
-      description:
-        "To create a world where sustainable living is accessible, affordable, and the preferred choice for everyone.",
-    },
-    {
-      icon: <Target className="w-12 h-12" />,
-      title: "Our Mission",
-      description:
-        "Providing high-quality, eco-friendly products that reduce environmental impact while enhancing everyday life.",
-    },
-    {
-      icon: <Heart className="w-12 h-12" />,
-      title: "Our Values",
-      description:
-        "Sustainability, transparency, quality, and community. We believe in doing business responsibly.",
-    },
-  ];
-
   const timeline = [
     {
       year: "2020",
@@ -177,11 +150,7 @@ const AboutPage = () => {
                   : "opacity-0 translate-y-8"
               }`}
             >
-              <div className="flex justify-center mb-6">
-                <div className="bg-green-600 p-4 rounded-full shadow-lg">
-                  <Leaf className="w-12 h-12 text-white" />
-                </div>
-              </div>
+              <div className="flex justify-center mb-6"></div>
               <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
                 Welcome to EcoShop
               </h1>
@@ -189,26 +158,6 @@ const AboutPage = () => {
                 Your trusted destination for eco-friendly and sustainable
                 products that make a difference for our planet.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
-                  Explore Our Story <ArrowRight className="w-5 h-5" />
-                </button>
-                <button className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full font-semibold transition-all">
-                  Shop Products
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating Elements */}
-          <div className="absolute top-20 left-10 animate-bounce delay-1000">
-            <div className="bg-green-200 p-3 rounded-full opacity-60">
-              <Leaf className="w-6 h-6 text-green-600" />
-            </div>
-          </div>
-          <div className="absolute top-32 right-16 animate-bounce delay-2000">
-            <div className="bg-emerald-200 p-3 rounded-full opacity-60">
-              <Globe className="w-6 h-6 text-emerald-600" />
             </div>
           </div>
         </section>
@@ -296,58 +245,14 @@ const AboutPage = () => {
                     alt="Eco friendly products"
                     className="rounded-2xl shadow-2xl w-full h-[400px] object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-green-900/20 to-transparent rounded-2xl"></div>
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl">
-                      <p className="text-sm font-medium text-gray-800">
-                        "Sustainable products for a better tomorrow"
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Vision, Mission, Values */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                Our Foundation
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Built on strong values and a clear vision for a sustainable
-                future
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {values.map((value, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group hover:-translate-y-2"
-                >
-                  <div className="flex justify-center mb-6">
-                    <div className="bg-green-100 group-hover:bg-green-200 p-4 rounded-full transition-colors">
-                      <div className="text-green-600">{value.icon}</div>
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    {value.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {value.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Why Choose Us Section */}
-        <section className="py-20 px-4">
+        <section className="py-20 px-4  bg-gradient-to-br from-amber-50 to-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
@@ -446,7 +351,8 @@ const AboutPage = () => {
               Trusted and verified by leading sustainability organizations
             </p>
 
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
+            {/* Desktop Grid */}
+            <div className="hidden md:grid grid-cols-3 md:grid-cols-6 gap-6">
               {certifications.map((cert, index) => (
                 <div key={index} className="group">
                   <div className="bg-gray-50 group-hover:bg-green-50 p-6 rounded-xl transition-colors">
@@ -458,43 +364,22 @@ const AboutPage = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* Call to Action */}
-        <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ready to Go Green?
-            </h2>
-            <p className="text-xl mb-8 opacity-90 leading-relaxed">
-              Join thousands of customers who have already made the switch to
-              sustainable living. Every purchase makes a difference for our
-              planet.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
-                Explore Products <ArrowRight className="w-5 h-5" />
-              </button>
-              <button className="border-2 border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 rounded-full font-semibold transition-all">
-                Contact Us
-              </button>
-            </div>
-
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div>
-                <Truck className="w-8 h-8 mx-auto mb-3 opacity-80" />
-                <p className="font-medium">Free Carbon-Neutral Shipping</p>
-              </div>
-              <div>
-                <Shield className="w-8 h-8 mx-auto mb-3 opacity-80" />
-                <p className="font-medium">30-Day Money Back Guarantee</p>
-              </div>
-              <div>
-                <Award className="w-8 h-8 mx-auto mb-3 opacity-80" />
-                <p className="font-medium">Award-Winning Customer Service</p>
-              </div>
+            {/* Mobile Carousel */}
+            <div className="flex md:hidden overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide">
+              {certifications.map((cert, index) => (
+                <div
+                  key={index}
+                  className="flex-shrink-0 snap-center w-40 group"
+                >
+                  <div className="bg-gray-50 group-hover:bg-green-50 p-6 rounded-xl transition-colors">
+                    <div className="text-3xl mb-2">{cert.icon}</div>
+                    <div className="text-sm font-medium text-gray-700 group-hover:text-green-700">
+                      {cert.name}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

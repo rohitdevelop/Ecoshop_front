@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -11,20 +11,17 @@ import {
   Send,
   MessageCircle,
   Users,
-  Headphones,
-  Globe,
   Facebook,
   Twitter,
   Instagram,
   Linkedin,
   CheckCircle,
-  AlertCircle,
-  ArrowRight,
   Calendar,
   Zap,
 } from "lucide-react";
 
 const ContactPage = () => {
+  const [isVisible, setIsVisible] = useState({});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -101,6 +98,28 @@ const ContactPage = () => {
     });
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({
+              ...prev,
+              [entry.target.id]: true,
+            }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll("[data-animate]").forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -129,14 +148,20 @@ const ContactPage = () => {
 
       <div className="bg-white text-gray-900 min-h-screen">
         {/* Hero Section */}
-        <section className="relative bg-gradient-to-br from-green-50 via-green-100 to-emerald-100 pt-24 pb-16 px-4 overflow-hidden mt-16">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-600/5 to-emerald-600/5"></div>
-          <div className="max-w-6xl mx-auto text-center relative z-10">
-            <div className="flex justify-center mb-6">
-              <div className="bg-green-600 p-4 rounded-full shadow-lg">
-                <Headphones className="w-12 h-12 text-white" />
-              </div>
-            </div>
+      <section
+  id="hero"
+  data-animate
+  className="relative bg-gradient-to-br from-green-50 via-green-100 to-emerald-100 pt-24 pb-16 px-4 overflow-hidden mt-16"
+>
+
+          <div
+            className={`max-w-4xl mx-auto text-center transition-all duration-1000 ${
+              isVisible.hero
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+          >
+            {" "}
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
               Get In Touch
             </h1>
@@ -144,15 +169,6 @@ const ContactPage = () => {
               We'd love to hear from you! Whether you have questions, feedback,
               or need support with your eco-friendly journey.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
-                <MessageCircle className="w-5 h-5" />
-                Start Live Chat
-              </button>
-              <button className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-8 py-4 rounded-full font-semibold transition-all">
-                Schedule a Call
-              </button>
-            </div>
           </div>
         </section>
 
@@ -499,22 +515,6 @@ const ContactPage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-16 px-4 bg-gray-50">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-gray-600 mb-8">
-              Can't find what you're looking for? Check out our comprehensive
-              FAQ section.
-            </p>
-            <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 mx-auto">
-              View All FAQs <ArrowRight className="w-5 h-5" />
-            </button>
           </div>
         </section>
       </div>
