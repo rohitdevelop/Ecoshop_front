@@ -10,17 +10,15 @@ const categories = [
     slug: "home",
     description: "Eco-friendly household essentials for sustainable living",
     icon: "🏠",
-    image:
-      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop",
-    products: [
+     products: [
       {
         id: 101,
         name: "Organic Kitchen Towels",
         price: 24.99,
         originalPrice: 34.99,
-        image:
-          "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=300&fit=crop",
-        rating: 4.8,
+         image:
+        "https://www.jiomart.com/images/product/original/491601879/my-home-scrubz-kitchen-towel-30-x-46-cm-4-pcs-product-images-o491601879-p491601879-1-202203151913.jpg?im=Resize=(420,420)",
+         rating: 4.8,
         reviews: 124,
         badge: "Bestseller",
         description: "100% organic cotton kitchen towels",
@@ -29,8 +27,8 @@ const categories = [
         id: 102,
         name: "Smart Compost Bin",
         price: 89.99,
-        image:
-          "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop",
+         image:
+         "https://5.imimg.com/data5/FQ/DH/HZ/SELLER-3591911/15-smart-composter-500x500.jpg",
         rating: 4.6,
         reviews: 89,
         badge: "New",
@@ -41,7 +39,7 @@ const categories = [
         name: "Bamboo Utensil Set",
         price: 19.99,
         image:
-          "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=300&fit=crop",
+          "https://media-uk.landmarkshops.in/cdn-cgi/image/h=550,w=550,q=85,fit=cover/homecentre/1000005388373-1000005388372_02-2100.jpg",
         rating: 4.9,
         reviews: 256,
         description: "Portable bamboo cutlery set",
@@ -50,8 +48,9 @@ const categories = [
         id: 104,
         name: "Glass Food Containers",
         price: 45.99,
+        
         image:
-          "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop",
+          "https://www.jiomart.com/images/product/original/rvcovfhgk5/cutting-edge-transparent-glass-food-container-320-ml-set-of-2-product-images-orvcovfhgk5-p600849758-5-202304232338.jpg?im=Resize=(420,420)",
         rating: 4.7,
         reviews: 167,
         description: "Airtight glass storage containers",

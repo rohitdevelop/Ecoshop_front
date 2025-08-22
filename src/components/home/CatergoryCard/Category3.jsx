@@ -10,16 +10,14 @@ const categories = [
     slug: "lifestyle",
     description: "Sustainable gifts and lifestyle products",
     icon: "🎁",
-    image:
-      "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
     products: [
       {
         id: 301,
         name: "Plantable Notebook Set",
         price: 22.99,
         image:
-          "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
-        rating: 4.6,
+        "https://www.jiomart.com/images/product/original/rvgyk0b51m/paper-nest-eco-friendly-stationery-gifts-gift-pack-paper-pencils-tree-free-recycled-paper-notepad-birthday-gifts-for-kids-handmade-stationery-set-of-10-product-images-orvgyk0b51m-p606031385-0-202311080050.jpg?im=Resize=(1000,1000)",
+         rating: 4.6,
         reviews: 112,
         description: "Seed paper notebooks that grow plants",
       },
@@ -28,8 +26,8 @@ const categories = [
         name: "Upcycled Tote Bags",
         price: 35.99,
         image:
-          "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
-        rating: 4.8,
+        "https://www.jiomart.com/images/product/original/450154712_multi/geometric-pattern-tote-bag-model-450154712_multi-0-202302061829.jpg?im=Resize=(330,410)",
+         rating: 4.8,
         reviews: 189,
         badge: "Eco Choice",
         description: "Stylish bags made from recycled materials",
@@ -39,7 +37,7 @@ const categories = [
         name: "Coconut Bowl Gift Set",
         price: 41.99,
         image:
-          "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop",
+         "https://www.jiomart.com/images/product/original/rvfpba25qx/thenga-hand-carved-natural-coconut-shell-bowl-for-smoothie-cereals-soup-nuts-500-ml-1-bowl-and-spoon-product-images-orvfpba25qx-p608584532-0-202403262315.jpg?im=Resize=(420,420)",
         rating: 4.7,
         reviews: 134,
         description: "Handcrafted coconut bowls with spoons",
@@ -50,7 +48,7 @@ const categories = [
         price: 54.99,
         originalPrice: 69.99,
         image:
-          "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop",
+         "https://www.jiomart.com/images/product/original/rvysyixg96/sapi-s-green-wax-scented-heart-pillar-candles-set-of-3-product-images-orvysyixg96-p598142378-0-202302060956.jpg?im=Resize=(1000,1000)",
         rating: 4.9,
         reviews: 203,
         badge: "Bestseller",

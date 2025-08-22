@@ -17,48 +17,50 @@ const Home = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [imageLoaded, setImageLoaded] = useState({});
   const [currentSlide, setCurrentSlide] = useState(0);
-  const heroSlides = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1920&h=800&fit=crop&crop=center",
-      title: "Sustainable Living Starts Here",
-      subtitle:
-        "Discover eco-friendly products that make a difference for our planet",
-      cta: "Shop Collection",
-      overlay: "from-green-900/70 to-green-700/50",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1920&h=800&fit=crop&crop=center",
-      title: "Zero Waste Kitchen Essentials",
-      subtitle:
-        "Transform your kitchen into an eco paradise with our sustainable products",
-      cta: "Explore Kitchen",
-      overlay: "from-emerald-900/70 to-emerald-700/50",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1920&h=800&fit=crop&crop=center",
-      title: "Natural Beauty & Wellness",
-      subtitle:
-        "Pamper yourself with nature's finest ingredients and organic products",
-      cta: "Shop Beauty",
-      overlay: "from-teal-900/70 to-teal-700/50",
-    },
-    {
-      id: 4,
-      image:
-        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1920&h=800&fit=crop&crop=center",
-      title: "Eco-Friendly Home Solutions",
-      subtitle:
-        "Create a sustainable home with our carefully curated green products",
-      cta: "Discover More",
-      overlay: "from-green-900/70 to-emerald-700/50",
-    },
-  ];
+
+const heroSlides = [
+  {
+    id: 1,
+    image:
+      "https://aqomi.com/wp-content/uploads/2024/02/Aqomi_Embracing_Eco-Friendly_Design_in_Your_Brand_s_Aesthetics_3.webp",
+    title: "Sustainable Living Starts Here",
+    subtitle:
+      "Discover eco-friendly products that make a difference for our planet",
+    cta: "Shop Collection",
+    overlay: "from-green-900/70 to-green-700/50",
+  },
+  {
+    id: 2,
+    image:
+      "https://images.stockcake.com/public/7/3/e/73ec666a-38df-436f-a1a1-560a999473a8_large/eco-friendly-beauty-products-stockcake.jpg",
+    title: "Zero Waste Kitchen Essentials",
+    subtitle:
+      "Transform your kitchen into an eco paradise with our sustainable products",
+    cta: "Explore Kitchen",
+    overlay: "from-emerald-900/70 to-emerald-700/50",
+  },
+  {
+    id: 3,
+    image:
+      "https://www.benz-packaging.com/BenzPackagingBackEndImg/BlogImage/sustainable-packaging-what-you-need-to-know-about-green-packaging-2.jpg",
+    title: "Natural Beauty & Wellness",
+    subtitle:
+      "Pamper yourself with nature's finest ingredients and organic products",
+    cta: "Shop Beauty",
+    overlay: "from-teal-900/70 to-teal-700/50",
+  },
+  {
+    id: 4,
+    image:
+      "https://cdn.prod.website-files.com/5a009403519aa50001480224/6595e229c0ef4ccfa2f2a601_Plasticfreestore.jpeg",
+    title: "Eco-Friendly Home Solutions",
+    subtitle:
+      "Create a sustainable home with our carefully curated green products",
+    cta: "Discover More",
+    overlay: "from-green-900/70 to-emerald-700/50",
+  },
+];
+
 
   const features = [
     {
