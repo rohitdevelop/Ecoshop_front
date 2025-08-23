@@ -1,7 +1,8 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { useWishlist } from "@/Context/WishlistContext"; 
 
 const categories = [
   {
@@ -10,15 +11,15 @@ const categories = [
     slug: "home",
     description: "Eco-friendly household essentials for sustainable living",
     icon: "🏠",
-     products: [
+    products: [
       {
         id: 101,
         name: "Organic Kitchen Towels",
         price: 24.99,
         originalPrice: 34.99,
-         image:
-        "https://www.jiomart.com/images/product/original/491601879/my-home-scrubz-kitchen-towel-30-x-46-cm-4-pcs-product-images-o491601879-p491601879-1-202203151913.jpg?im=Resize=(420,420)",
-         rating: 4.8,
+        image:
+          "https://www.jiomart.com/images/product/original/491601879/my-home-scrubz-kitchen-towel-30-x-46-cm-4-pcs-product-images-o491601879-p491601879-1-202203151913.jpg?im=Resize=(420,420)",
+        rating: 4.8,
         reviews: 124,
         badge: "Bestseller",
         description: "100% organic cotton kitchen towels",
@@ -27,8 +28,8 @@ const categories = [
         id: 102,
         name: "Smart Compost Bin",
         price: 89.99,
-         image:
-         "https://5.imimg.com/data5/FQ/DH/HZ/SELLER-3591911/15-smart-composter-500x500.jpg",
+        image:
+          "https://5.imimg.com/data5/FQ/DH/HZ/SELLER-3591911/15-smart-composter-500x500.jpg",
         rating: 4.6,
         reviews: 89,
         badge: "New",
@@ -48,7 +49,6 @@ const categories = [
         id: 104,
         name: "Glass Food Containers",
         price: 45.99,
-        
         image:
           "https://www.jiomart.com/images/product/original/rvcovfhgk5/cutting-edge-transparent-glass-food-container-320-ml-set-of-2-product-images-orvcovfhgk5-p600849758-5-202304232338.jpg?im=Resize=(420,420)",
         rating: 4.7,
@@ -60,14 +60,8 @@ const categories = [
 ];
 
 const Category1 = () => {
-  const [favorites, setFavorites] = useState([]);
+  const { wishlist, toggleWishlist } = useWishlist();
   const carouselRefs = useRef({});
-
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
-    );
-  };
 
   const scrollCarousel = (id, direction) => {
     const carousel = carouselRefs.current[id];
@@ -106,52 +100,55 @@ const Category1 = () => {
               ref={(el) => (carouselRefs.current[category.id] = el)}
               className="flex gap-6 overflow-x-auto scrollbar-hide scroll-smooth pb-4"
             >
-              {category.products.map((product) => (
-                <div
-                  key={product.id}
-                  className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] bg-white rounded-2xl shadow-md hover:shadow-xl transition p-4 group"
-                >
-                  {/* Image with hover scale */}
-                  <div className="relative w-full h-48 sm:h-56 rounded-xl overflow-hidden">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <button
-                      onClick={() => toggleFavorite(product.id)}
-                      className="absolute top-3 right-3 bg-white/90 rounded-full p-2 shadow cursor-pointer"
-                    >
-                      <Heart
-                        size={20}
-                        className={
-                          favorites.includes(product.id)
-                            ? "text-red-500 fill-red-500"
-                            : "text-gray-600 "
-                        }
+              {category.products.map((product) => {
+                const isLiked = wishlist.some((i) => i.id === product.id);
+                return (
+                  <div
+                    key={product.id}
+                    className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] bg-white rounded-2xl shadow-md hover:shadow-xl transition p-4 group"
+                  >
+                    {/* Image with hover scale */}
+                    <div className="relative w-full h-48 sm:h-56 rounded-xl overflow-hidden">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
+                      <button
+                        onClick={() => toggleWishlist(product)}
+                        className="absolute top-3 right-3 bg-white/90 rounded-full p-2 shadow cursor-pointer"
+                      >
+                        <Heart
+                          size={20}
+                          className={
+                            isLiked
+                              ? "text-red-500 fill-red-500"
+                              : "text-gray-600"
+                          }
+                        />
+                      </button>
+                    </div>
+
+                    {/* Product Info */}
+                    <h4 className="font-semibold text-lg mt-3">{product.name}</h4>
+                    <p className="text-green-600 font-bold text-lg">
+                      ${product.price}
+                    </p>
+                    <p className="text-gray-500 text-sm line-clamp-2">
+                      {product.description}
+                    </p>
+
+                    {/* Explore Button */}
+                    <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
+                      Explore
                     </button>
                   </div>
-
-                  {/* Product Info */}
-                  <h4 className="font-semibold text-lg mt-3">{product.name}</h4>
-                  <p className="text-green-600 font-bold text-lg">
-                    ${product.price}
-                  </p>
-                  <p className="text-gray-500 text-sm line-clamp-2">
-                    {product.description}
-                  </p>
-
-                  {/* Explore Button */}
-                  <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
-                    Explore
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Scroll Buttons (Desktop only) */}
+            {/* Scroll Buttons */}
             <button
               onClick={() => scrollCarousel(category.id, "left")}
               className="hidden sm:flex absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow p-3 rounded-full"

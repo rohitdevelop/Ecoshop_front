@@ -1,15 +1,8 @@
 // src/app/layout.js
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
-// import Navbar from "@/components/Navbar";
-// import Footer from "@/components/Footer";
+import { ClerkProvider } from "@clerk/nextjs";
+import { WishlistProvider } from "@/Context/WishlistContext";
+
 export const metadata = {
   title: "EcoShop",
   description: "Eco-Friendly E-Commerce Website",
@@ -20,9 +13,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body className="antialiased">
-          {/* <Navbar/> */}
-        {children}
-        {/* <Footer/> */}
+          <WishlistProvider>{children}</WishlistProvider>
         </body>
       </html>
     </ClerkProvider>

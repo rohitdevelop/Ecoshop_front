@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useWishlist } from "@/Context/WishlistContext";
 import {
   Heart,
   ShoppingCart,
@@ -22,6 +23,7 @@ import {
 } from "@clerk/nextjs";
 
 const Navbar = () => {
+  const { wishlist } = useWishlist();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user } = useUser();
@@ -90,15 +92,14 @@ const Navbar = () => {
 
         {/* Desktop Right Side */}
         <div className="hidden lg:flex items-center gap-4">
-          {/* Wishlist */}
           <Link
             href="/wishlist"
             className="relative p-2 text-gray-600 hover:text-red-500"
           >
             <Heart className="w-5 h-5" />
-            {wishlistItems > 0 && (
+            {wishlist.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {wishlistItems}
+                {wishlist.length}
               </span>
             )}
           </Link>
@@ -109,9 +110,11 @@ const Navbar = () => {
             className="relative p-2 text-gray-600 hover:text-green-600"
           >
             <ShoppingCart className="w-5 h-5" />
-            {cartItems > 0 && (
+            {/* replace with cart.length if you have cart context */}
+            {/* {cart.length > 0 && ( */}
+            {0 > 0 && ( // temporary (replace with real cart)
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {cartItems}
+                {0}
               </span>
             )}
           </Link>
@@ -153,9 +156,9 @@ const Navbar = () => {
             className="relative p-2 text-gray-600 hover:text-red-500"
           >
             <Heart className="w-5 h-5" />
-            {wishlistItems > 0 && (
+            {wishlist.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {wishlistItems}
+                {wishlist.length}
               </span>
             )}
           </Link>
@@ -166,9 +169,9 @@ const Navbar = () => {
             className="relative p-2 text-gray-600 hover:text-green-600"
           >
             <ShoppingCart className="w-5 h-5" />
-            {cartItems > 0 && (
+            {0 > 0 && (
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {cartItems}
+                {0}
               </span>
             )}
           </Link>
@@ -178,7 +181,11 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 text-gray-600 hover:text-green-600"
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
