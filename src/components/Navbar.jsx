@@ -35,14 +35,12 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/", icon: null },
-    { name: "Products", href: "/products", icon: null, hasDropdown: true },
+    { name: "Products", href: "/products", icon: null, },
     { name: "About", href: "/about", icon: null },
     { name: "Contact", href: "/contact", icon: Phone },
   ];
 
-  // Mock counters
-  const cartItems = 3;
-  const wishlistItems = 5;
+ 
 
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">

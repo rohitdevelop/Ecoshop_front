@@ -2,6 +2,7 @@
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WishlistProvider } from "@/Context/WishlistContext";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "EcoShop",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className="antialiased">
           <WishlistProvider>{children}</WishlistProvider>
+          <Toaster position="top-right" reverseOrder={false} />
         </body>
       </html>
     </ClerkProvider>

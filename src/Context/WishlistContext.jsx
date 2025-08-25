@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
+import toast from 'react-hot-toast';
 
 const WishlistContext = createContext();
 
@@ -21,11 +22,14 @@ export const WishlistProvider = ({ children }) => {
     setWishlist((prev) => {
       if (prev.some((i) => i.id === item.id)) {
         // Remove item
-        alert(`${item.name} removed from Wishlist`);
+        toast.error(`${item.name} removed from Wishlist`);
+        // alert(`${item.name} removed from Wishlist`);
         return prev.filter((i) => i.id !== item.id);
       } else {
         // Add item
-        alert(`${item.name} added to Wishlist`);
+                toast.success(`${item.name} added to Wishlist`);
+
+        // alert(`${item.name} added to Wishlist`);
         return [...prev, item];
       }
     });
