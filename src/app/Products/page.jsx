@@ -2,35 +2,35 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import api from "@/lib/api"; // Axios setup
-import ProductsCards from "@/components/ProductsCards";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
+ function Products() {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    api.get("/products").then((res) => {
-      setProducts(res.data.data);
-    });
-  }, []);
+    fetch(`http://localhost:5000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data));
+  }, [id]);
+
+  if (!product) return <p className="p-6">Loading...</p>;
 
   return (
     <>
     <Navbar/>
-    <div className="p-6 bg-gray-100 min-h-screen mt-15">
-      <h1 className="text-3xl font-bold mb-6 text-center text-green-700">
-        All Products
-      </h1>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-
-        {products.map((product) => (
-            <ProductsCacrds key={product._id} product={product} />
-        ))}
-      </div>
-      <div className="">
-        Loding..........
-      </div>
+    <div className="p-6 max-w-3xl mx-auto">
+      <img
+        src={product.image}
+        alt={product.title}
+        className="w-full h-64 object-cover rounded-xl"
+      />
+      <h1 className="text-2xl font-bold mt-4">{product.title}</h1>
+      <p className="text-gray-600">{product.category}</p>
+      <p className="text-green-600 text-xl font-semibold">₹{product.price}</p>
+      <p className="mt-2">{product.description}</p>
+      <p className="mt-2">Stock: {product.stock}</p>
     </div>
     <Footer />
           </>
