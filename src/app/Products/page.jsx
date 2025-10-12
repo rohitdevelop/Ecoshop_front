@@ -2,43 +2,51 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Heart, Leaf, Star, Filter, Search, Grid, List } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  Leaf,
+  Star,
+  Filter,
+  Search,
+  Grid,
+  List,
+} from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-
-// Dummy product structure for reference (assuming your API returns this)
-// { id: number, name: string, price: number, category: string, rating: number, reviews: number, featured: boolean, images: string[] }
+import { useWishlist } from "@/Context/WishlistContext";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [likedProducts, setLikedProducts] = useState(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("featured");
+  
+  // Get wishlist functions from context
+  const { wishlist, toggleWishlist } = useWishlist();
 
   // --- Fetch Products Effect ---
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // NOTE: Ensure your backend is running at this address
         // const response = await fetch("http://localhost:4000/dumyproducts");
-        const response = await fetch("https://ecoshop-back.onrender.com/dumyproducts")
-        if (!response.ok) {
-          throw new Error("Network response was not ok. Server might be down.");
-        }
-        
+        const response = await fetch(
+          "https://ecoshop-back.onrender.com/dumyproducts"
+        );
+
         const data = await response.json();
-        // Assuming data structure is { data: product[] }
         const productData = data.data || [];
         setProducts(productData);
         setFilteredProducts(productData);
       } catch (err) {
         console.error("Error fetching products:", err);
-        setError("Failed to load products. Please check the backend server connection.");
+        setError(
+          "Failed to load products. Please check the backend server connection."
+        );
       } finally {
         setLoading(false);
       }
@@ -53,15 +61,18 @@ export default function ProductsPage() {
 
     // Search filter
     if (searchQuery) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          product.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
     // Category filter
     if (selectedCategory !== "All") {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(
+        (product) => product.category === selectedCategory
+      );
     }
 
     // Sort logic
@@ -89,24 +100,32 @@ export default function ProductsPage() {
     e.stopPropagation();
     console.log(`Added product ${product.name} (ID: ${product.id}) to cart!`);
     // Replaced alert with a more subtle console log, but keeping the original if desired
-    // alert(`${product.name} added to your cart! 🛒`); 
+    // alert(`${product.name} added to your cart! 🛒`);
   };
 
   const handleLikeToggle = (e, product) => {
     e.preventDefault();
     e.stopPropagation();
-    setLikedProducts(prev => {
-      const newLiked = new Set(prev);
-      if (newLiked.has(product.id)) {
-        newLiked.delete(product.id);
-      } else {
-        newLiked.add(product.id);
-      }
-      return newLiked;
-    });
+    
+    // Check if product is already in wishlist
+    const isInWishlist = wishlist.some((item) => item.id === product.id);
+    
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      alert("error hai")
+     }
   };
 
-  const categories = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
+  // Helper function to check if product is in wishlist
+  const isProductInWishlist = (productId) => {
+    return wishlist.some((item) => item.id === productId);
+  };
+
+  const categories = [
+    "All",
+    ...new Set(products.map((p) => p.category).filter(Boolean)),
+  ];
 
   // --- Loading State UI ---
   if (loading) {
@@ -114,7 +133,9 @@ export default function ProductsPage() {
       <div className="min-h-screen flex justify-center items-center bg-black text-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent mb-4"></div>
-          <p className="text-lg text-green-400">Loading sustainable products...</p>
+          <p className="text-lg text-green-400">
+            Loading sustainable products...
+          </p>
         </div>
       </div>
     );
@@ -137,7 +158,7 @@ export default function ProductsPage() {
   return (
     <>
       <Navbar />
-      
+
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
         <header className="bg-emerald-700 text-white py-16 px-4 mt-12">
@@ -158,7 +179,6 @@ export default function ProductsPage() {
           {/* Search and Filter Bar - More Professional, less rounded */}
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8 border border-gray-100">
             <div className="grid grid-cols-2 md:grid-cols-12 gap-3 sm:gap-4 items-center">
-              
               {/* Search Input */}
               <div className="col-span-2 md:col-span-4 lg:col-span-5 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -178,12 +198,20 @@ export default function ProductsPage() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm appearance-none bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
                   ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  <svg
+                    className="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
                 </div>
               </div>
 
@@ -200,7 +228,13 @@ export default function ProductsPage() {
                   <option value="rating">Top Rated</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  <svg
+                    className="fill-current h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
                 </div>
               </div>
 
@@ -233,7 +267,11 @@ export default function ProductsPage() {
 
             {/* Results Count */}
             <p className="mt-4 text-sm text-gray-500">
-              Showing <span className="text-emerald-700 font-medium">{filteredProducts.length}</span> products
+              Showing{" "}
+              <span className="text-emerald-700 font-medium">
+                {filteredProducts.length}
+              </span>{" "}
+              products
             </p>
           </div>
 
@@ -241,8 +279,12 @@ export default function ProductsPage() {
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg shadow-md">
               <div className="text-5xl mb-3 text-gray-400">🔍</div>
-              <h3 className="text-xl text-gray-700">No products match your criteria.</h3>
-              <p className="text-gray-500">Try broadening your search or filter.</p>
+              <h3 className="text-xl text-gray-700">
+                No products match your criteria.
+              </h3>
+              <p className="text-gray-500">
+                Try broadening your search or filter.
+              </p>
             </div>
           ) : (
             <div
@@ -261,14 +303,24 @@ export default function ProductsPage() {
                   }`}
                 >
                   {/* Image Section */}
-                  <div className={`relative overflow-hidden ${viewMode === "list" ? "w-full h-48 sm:w-48 sm:h-auto flex-shrink-0" : "h-64"}`}>
+                  <div
+                    className={`relative overflow-hidden ${
+                      viewMode === "list"
+                        ? "w-full h-48 sm:w-48 sm:h-auto flex-shrink-0"
+                        : "h-64"
+                    }`}
+                  >
                     <img
-                      src={product.images ? product.images[0] : "/placeholder-image.jpg"}
+                      src={
+                        product.images
+                          ? product.images[0]
+                          : "/placeholder-image.jpg"
+                      }
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
-                    
+
                     {/* Featured/Eco-Choice Badge */}
                     {product.featured && (
                       <span className="absolute top-3 left-3 bg-emerald-600 text-white text-xs px-2 py-1 rounded-full flex items-center shadow-md">
@@ -284,23 +336,29 @@ export default function ProductsPage() {
                       className="absolute top-3 right-3 p-2 rounded-full bg-white/80 hover:bg-white transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
                     >
                       <Heart
-                        className={`w-5 h-5 transition-colors ${
-                          likedProducts.has(product.id)
+                        className={`w-5 h-5 transition-all duration-200 ${
+                          isProductInWishlist(product.id)
                             ? "fill-red-500 text-red-500"
-                            : "text-gray-400"
+                            : "text-gray-600"
                         }`}
                       />
                     </button>
-                  </div>
+                  </div>  
 
                   {/* Product Details */}
-                  <div className={`p-4 ${viewMode === "list" ? "flex-1 flex flex-col justify-between" : ""}`}>
+                  <div
+                    className={`p-4 ${
+                      viewMode === "list"
+                        ? "flex-1 flex flex-col justify-between"
+                        : ""
+                    }`}
+                  >
                     <div>
                       {/* Name */}
                       <h2 className="text-lg font-normal text-gray-800 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1">
                         {product.name}
                       </h2>
-                      
+
                       {/* Category */}
                       <p className="text-xs text-gray-500 mb-3 uppercase tracking-wider">
                         {product.category}
@@ -310,13 +368,13 @@ export default function ProductsPage() {
                       <div className="flex items-center mb-4">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
+                            <Star
+                              key={i}
                               className={`w-4 h-4 ${
-                                (product.rating || 0) > i 
-                                  ? 'fill-amber-400 text-amber-400' 
-                                  : 'text-gray-300'
-                              }`} 
+                                (product.rating || 0) > i
+                                  ? "fill-amber-400 text-amber-400"
+                                  : "text-gray-300"
+                              }`}
                             />
                           ))}
                         </div>
@@ -330,7 +388,13 @@ export default function ProductsPage() {
                     </div>
 
                     {/* Price and CTA */}
-                    <div className={viewMode === "list" ? "mt-4 border-t pt-4 border-gray-100" : ""}>
+                    <div
+                      className={
+                        viewMode === "list"
+                          ? "mt-4 border-t pt-4 border-gray-100"
+                          : ""
+                      }
+                    >
                       <div className="mb-3">
                         <p className="text-sm text-gray-500">Price</p>
                         <p className="text-2xl font-semibold text-emerald-600">
@@ -347,7 +411,7 @@ export default function ProductsPage() {
                           <ShoppingCart className="w-4 h-4" />
                           <p className="hidden sm:inline">Add to Cart</p>
                         </button>
-                        
+
                         <button
                           onClick={(e) => {
                             e.preventDefault();
@@ -365,7 +429,7 @@ export default function ProductsPage() {
               ))}
             </div>
           )}
-        </div> 
+        </div>
       </div>
 
       <Footer />
