@@ -16,36 +16,65 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useWishlist } from "@/Context/WishlistContext";
 
+/**
+ * ProductsPage Component
+ * Displays a filterable, sortable grid/list of eco-friendly products
+ * with wishlist and cart functionality
+ */
 export default function ProductsPage() {
+  // ============================
+  // STATE MANAGEMENT
+  // ============================
+  
+  // Product data states
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Filter and search states
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [viewMode, setViewMode] = useState("grid");
   const [sortBy, setSortBy] = useState("featured");
+  
+  // UI states
+  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
   
   // Get wishlist functions from context
   const { wishlist, toggleWishlist } = useWishlist();
 
-  // --- Fetch Products Effect ---
+  // ============================
+  // DATA FETCHING
+  // ============================
+  
+  /**
+   * Fetch products from API on component mount
+   */
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // const response = await fetch("http://localhost:4000/dumyproducts");
+        setLoading(true);
+        
+        // Fetch from production API
         const response = await fetch(
           "https://ecoshop-back.onrender.com/dumyproducts"
         );
+        
+        // Check if response is successful
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
         const productData = data.data || [];
+        
         setProducts(productData);
         setFilteredProducts(productData);
+        setError(null);
       } catch (err) {
         console.error("Error fetching products:", err);
         setError(
-          "Failed to load products. Please check the backend server connection."
+          "Failed to load products. Please check your internet connection and try again."
         );
       } finally {
         setLoading(false);
@@ -53,114 +82,197 @@ export default function ProductsPage() {
     };
 
     fetchProducts();
-  }, []);
+  }, []); // Run only once on mount
 
-  // --- Filter and Sort Products Effect ---
+  // ============================
+  // FILTERING & SORTING LOGIC
+  // ============================
+  
+  /**
+   * Filter and sort products whenever dependencies change
+   */
   useEffect(() => {
     let filtered = [...products];
 
-    // Search filter
-    if (searchQuery) {
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(
         (product) =>
-          product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          product.category.toLowerCase().includes(searchQuery.toLowerCase())
+          product.name?.toLowerCase().includes(query) ||
+          product.category?.toLowerCase().includes(query) ||
+          product.description?.toLowerCase().includes(query)
       );
     }
 
-    // Category filter
+    // Apply category filter
     if (selectedCategory !== "All") {
       filtered = filtered.filter(
         (product) => product.category === selectedCategory
       );
     }
 
-    // Sort logic
+    // Apply sorting
     switch (sortBy) {
       case "price-low":
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
         break;
       case "price-high":
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
         break;
       case "rating":
         filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
+      case "featured":
       default:
-        // Featured / Default
-        filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        // Featured items first, then by name
+        filtered.sort((a, b) => {
+          if (a.featured && !b.featured) return -1;
+          if (!a.featured && b.featured) return 1;
+          return (a.name || "").localeCompare(b.name || "");
+        });
+        break;
     }
 
     setFilteredProducts(filtered);
   }, [searchQuery, selectedCategory, sortBy, products]);
 
-  // --- Handlers ---
+  // ============================
+  // EVENT HANDLERS
+  // ============================
+  
+  /**
+   * Handle adding product to cart
+   * @param {Event} e - Click event
+   * @param {Object} product - Product object
+   */
   const handleAddToCart = (e, product) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // TODO: Implement actual cart functionality
     console.log(`Added product ${product.name} (ID: ${product.id}) to cart!`);
-    // Replaced alert with a more subtle console log, but keeping the original if desired
-    // alert(`${product.name} added to your cart! 🛒`);
+    
+    // Optional: Show a toast notification instead of alert
+    // toast.success(`${product.name} added to cart!`);
   };
 
+  /**
+   * Handle toggling product in wishlist
+   * @param {Event} e - Click event
+   * @param {Object} product - Product object
+   */
   const handleLikeToggle = (e, product) => {
     e.preventDefault();
     e.stopPropagation();
     
-    // Check if product is already in wishlist
-    const isInWishlist = wishlist.some((item) => item.id === product.id);
-    
-    if (isInWishlist) {
-      removeFromWishlist(product.id);
+    // Use the toggleWishlist function from context
+    // This properly handles adding/removing from wishlist
+    if (toggleWishlist) {
+      toggleWishlist(product);
     } else {
-      alert("error hai")
-     }
+      console.error("toggleWishlist function not available from context");
+    }
   };
 
-  // Helper function to check if product is in wishlist
+  /**
+   * Check if a product is in the wishlist
+   * @param {string|number} productId - Product ID to check
+   * @returns {boolean} - True if product is in wishlist
+   */
   const isProductInWishlist = (productId) => {
-    return wishlist.some((item) => item.id === productId);
+    return Array.isArray(wishlist) && wishlist.some((item) => item.id === productId);
   };
 
+  /**
+   * Handle "Buy Now" action
+   * @param {Event} e - Click event
+   * @param {Object} product - Product object
+   */
+  const handleBuyNow = (e, product) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // TODO: Implement checkout flow
+    console.log(`Initiating purchase for ${product.name}`);
+    
+    // Navigate to checkout or add to cart and go to cart page
+    // router.push(`/checkout?product=${product.id}`);
+  };
+
+  // ============================
+  // HELPER FUNCTIONS
+  // ============================
+  
+  /**
+   * Get unique categories from products
+   */
   const categories = [
     "All",
     ...new Set(products.map((p) => p.category).filter(Boolean)),
   ];
 
-  // --- Loading State UI ---
+  // ============================
+  // RENDER: LOADING STATE
+  // ============================
+  
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-black text-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent mb-4"></div>
-          <p className="text-lg text-green-400">
-            Loading sustainable products...
-          </p>
+      <>
+        <Navbar />
+        <div className="min-h-screen flex justify-center items-center bg-gray-50">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent mb-4"></div>
+            <p className="text-lg text-gray-700">
+              Loading sustainable products...
+            </p>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
-  // --- Error State UI ---
+  // ============================
+  // RENDER: ERROR STATE
+  // ============================
+  
   if (error) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-black text-white">
-        <div className="text-center max-w-lg p-8 bg-white rounded-lg shadow-xl border border-red-200">
-          <div className="text-5xl mb-4 text-red-500">❌</div>
-          <h3 className="text-xl text-red-600 mb-2">Error Loading Products</h3>
-          <p className="text-gray-600">{error}</p>
+      <>
+        <Navbar />
+        <div className="min-h-screen flex justify-center items-center bg-gray-50 p-4">
+          <div className="text-center max-w-lg p-8 bg-white rounded-lg shadow-xl border border-red-200">
+            <div className="text-5xl mb-4">❌</div>
+            <h3 className="text-xl text-red-600 mb-2 font-semibold">
+              Error Loading Products
+            </h3>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
-  // --- Main Product Page UI ---
+  // ============================
+  // RENDER: MAIN CONTENT
+  // ============================
+  
   return (
     <>
       <Navbar />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Hero Section */}
+        {/* ============================
+            HERO SECTION
+            ============================ */}
         <header className="bg-emerald-700 text-white py-16 px-4 mt-12">
           <div className="max-w-7xl mx-auto text-center">
             <div className="flex items-center justify-center mb-4">
@@ -176,18 +288,22 @@ export default function ProductsPage() {
         </header>
 
         <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 -mt-8">
-          {/* Search and Filter Bar - More Professional, less rounded */}
+          {/* ============================
+              SEARCH AND FILTER BAR
+              ============================ */}
           <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-8 border border-gray-100">
             <div className="grid grid-cols-2 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+              
               {/* Search Input */}
               <div className="col-span-2 md:col-span-4 lg:col-span-5 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search by name or category..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500 transition"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                  aria-label="Search products"
                 />
               </div>
 
@@ -196,7 +312,8 @@ export default function ProductsPage() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm appearance-none bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm appearance-none bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                  aria-label="Filter by category"
                 >
                   {categories.map((cat) => (
                     <option key={cat} value={cat}>
@@ -220,7 +337,8 @@ export default function ProductsPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm appearance-none bg-white cursor-pointer focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm appearance-none bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                  aria-label="Sort products"
                 >
                   <option value="featured">Featured</option>
                   <option value="price-low">Price: Low to High</option>
@@ -238,12 +356,12 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {/* View Toggle */}
-              <div className="col-span-2 md:col-span-2 lg:col-span-1 flex gap-2">
+              {/* View Toggle Buttons */}
+              <div className="col-span-2 md:col-span-2 lg:col-span-1 flex gap-2 justify-end">
                 <button
                   onClick={() => setViewMode("grid")}
                   aria-label="Grid View"
-                  className={`p-2 rounded-md transition-colors ${
+                  className={`p-2 rounded-md transition-all duration-200 ${
                     viewMode === "grid"
                       ? "bg-emerald-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -254,7 +372,7 @@ export default function ProductsPage() {
                 <button
                   onClick={() => setViewMode("list")}
                   aria-label="List View"
-                  className={`p-2 rounded-md transition-colors ${
+                  className={`p-2 rounded-md transition-all duration-200 ${
                     viewMode === "list"
                       ? "bg-emerald-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -271,22 +389,36 @@ export default function ProductsPage() {
               <span className="text-emerald-700 font-medium">
                 {filteredProducts.length}
               </span>{" "}
-              products
+              {filteredProducts.length === 1 ? "product" : "products"}
             </p>
           </div>
 
-          {/* Products Display Area */}
+          {/* ============================
+              PRODUCTS DISPLAY AREA
+              ============================ */}
           {filteredProducts.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-lg shadow-md">
-              <div className="text-5xl mb-3 text-gray-400">🔍</div>
-              <h3 className="text-xl text-gray-700">
-                No products match your criteria.
+            // Empty State
+            <div className="text-center py-16 bg-white rounded-lg shadow-md">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-2xl text-gray-700 mb-2 font-semibold">
+                No products found
               </h3>
-              <p className="text-gray-500">
-                Try broadening your search or filter.
+              <p className="text-gray-500 mb-6">
+                Try adjusting your search or filter criteria
               </p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                  setSortBy("featured");
+                }}
+                className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors"
+              >
+                Clear Filters
+              </button>
             </div>
           ) : (
+            // Products Grid/List
             <div
               className={
                 viewMode === "grid"
@@ -298,13 +430,15 @@ export default function ProductsPage() {
                 <Link
                   key={product.id}
                   href={`/products/${product.id}`}
-                  className={`group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-emerald-300 ${
+                  className={`group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-emerald-300 ${
                     viewMode === "list" ? "flex flex-col sm:flex-row" : "block"
                   }`}
                 >
-                  {/* Image Section */}
+                  {/* ============================
+                      PRODUCT IMAGE SECTION
+                      ============================ */}
                   <div
-                    className={`relative overflow-hidden ${
+                    className={`relative overflow-hidden bg-gray-100 ${
                       viewMode === "list"
                         ? "w-full h-48 sm:w-48 sm:h-auto flex-shrink-0"
                         : "h-64"
@@ -312,40 +446,44 @@ export default function ProductsPage() {
                   >
                     <img
                       src={
-                        product.images
+                        product.images && product.images[0]
                           ? product.images[0]
                           : "/placeholder-image.jpg"
                       }
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      alt={product.name || "Product"}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"
                     />
 
-                    {/* Featured/Eco-Choice Badge */}
+                    {/* Featured Badge */}
                     {product.featured && (
-                      <span className="absolute top-3 left-3 bg-emerald-600 text-white text-xs px-2 py-1 rounded-full flex items-center shadow-md">
+                      <span className="absolute top-3 left-3 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full flex items-center shadow-md z-10">
                         <Leaf className="w-3 h-3 mr-1" />
                         Eco-Choice
                       </span>
                     )}
 
-                    {/* Like Button Overlay */}
+                    {/* Wishlist Heart Button */}
                     <button
                       onClick={(e) => handleLikeToggle(e, product)}
-                      aria-label={`Toggle like for ${product.name}`}
-                      className="absolute top-3 right-3 p-2 rounded-full bg-white/80 hover:bg-white transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
+                      aria-label={`${
+                        isProductInWishlist(product.id) ? "Remove from" : "Add to"
+                      } wishlist`}
+                      className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-red-400 z-10"
                     >
                       <Heart
                         className={`w-5 h-5 transition-all duration-200 ${
                           isProductInWishlist(product.id)
-                            ? "fill-red-500 text-red-500"
-                            : "text-gray-600"
+                            ? "fill-red-500 text-red-500 scale-110"
+                            : "text-gray-600 hover:text-red-400"
                         }`}
                       />
                     </button>
-                  </div>  
+                  </div>
 
-                  {/* Product Details */}
+                  {/* ============================
+                      PRODUCT DETAILS SECTION
+                      ============================ */}
                   <div
                     className={`p-4 ${
                       viewMode === "list"
@@ -354,19 +492,19 @@ export default function ProductsPage() {
                     }`}
                   >
                     <div>
-                      {/* Name */}
-                      <h2 className="text-lg font-normal text-gray-800 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1">
-                        {product.name}
+                      {/* Product Name */}
+                      <h2 className="text-lg font-medium text-gray-800 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1">
+                        {product.name || "Unnamed Product"}
                       </h2>
 
                       {/* Category */}
                       <p className="text-xs text-gray-500 mb-3 uppercase tracking-wider">
-                        {product.category}
+                        {product.category || "Uncategorized"}
                       </p>
 
-                      {/* Rating */}
+                      {/* Rating Display */}
                       <div className="flex items-center mb-4">
-                        <div className="flex items-center">
+                        <div className="flex items-center" aria-label={`Rating: ${product.rating || 0} out of 5 stars`}>
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
@@ -378,16 +516,20 @@ export default function ProductsPage() {
                             />
                           ))}
                         </div>
-                        <span className="text-sm text-gray-600 ml-2">
+                        <span className="text-sm text-gray-600 ml-2 font-medium">
                           {product.rating ? product.rating.toFixed(1) : "N/A"}
                         </span>
-                        <span className="text-xs text-gray-400 ml-2">
-                          ({product.reviews || 0})
-                        </span>
+                        {product.reviews > 0 && (
+                          <span className="text-xs text-gray-400 ml-1">
+                            ({product.reviews})
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    {/* Price and CTA */}
+                    {/* ============================
+                        PRICE & ACTION BUTTONS
+                        ============================ */}
                     <div
                       className={
                         viewMode === "list"
@@ -395,32 +537,34 @@ export default function ProductsPage() {
                           : ""
                       }
                     >
+                      {/* Price */}
                       <div className="mb-3">
-                        <p className="text-sm text-gray-500">Price</p>
+                        <p className="text-sm text-gray-500 mb-1">Price</p>
                         <p className="text-2xl font-semibold text-emerald-600">
                           ${product.price ? product.price.toFixed(2) : "0.00"}
                         </p>
                       </div>
 
+                      {/* Action Buttons */}
                       <div className="flex flex-col sm:flex-row gap-2">
+                        {/* Add to Cart Button */}
                         <button
                           onClick={(e) => handleAddToCart(e, product)}
-                          className="flex-1 flex items-center justify-center space-x-2 p-2 text-emerald-600 border border-emerald-500 rounded-md text-sm hover:bg-emerald-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98]"
+                          className="flex-1 flex items-center justify-center space-x-2 px-4 py-2 text-emerald-600 border border-emerald-500 rounded-md text-sm font-medium hover:bg-emerald-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-95"
                           aria-label={`Add ${product.name} to cart`}
                         >
                           <ShoppingCart className="w-4 h-4" />
-                          <p className="hidden sm:inline">Add to Cart</p>
+                          <span className="hidden sm:inline">Add to Cart</span>
+                          <span className="sm:hidden">Cart</span>
                         </button>
 
+                        {/* Buy Now Button */}
                         <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            // alert(`Proceeding to buy ${product.name} now!`);
-                          }}
-                          className="flex-1 bg-emerald-600 text-white p-2 rounded-md text-sm hover:bg-emerald-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98]"
+                          onClick={(e) => handleBuyNow(e, product)}
+                          className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-emerald-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-95"
+                          aria-label={`Buy ${product.name} now`}
                         >
-                          <p>Buy Now</p>
+                          Buy Now
                         </button>
                       </div>
                     </div>
