@@ -1,7 +1,11 @@
+// middleware.js or middleware.ts
+
 import { clerkMiddleware } from '@clerk/nextjs/server';
 
-export default clerkMiddleware();
+// This is the required default export
+export default clerkMiddleware(); 
 
+// The configuration is also necessary for matching routes
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
