@@ -26,7 +26,7 @@ const Navbar = () => {
   const { wishlist } = useWishlist();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user } = useUser();
+  const { user } = useUser(); // Hook provided by Clerk
 
   // Check if user is admin
   const isAdmin =
@@ -35,12 +35,10 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", href: "/", icon: null },
-    { name: "Products", href: "/products", icon: null, },
+    { name: "Products", href: "/products", icon: null },
     { name: "About", href: "/about", icon: null },
     { name: "Contact", href: "/contact", icon: Phone },
   ];
-
- 
 
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
@@ -110,7 +108,7 @@ const Navbar = () => {
             <ShoppingCart className="w-5 h-5" />
             {/* replace with cart.length if you have cart context */}
             {/* {cart.length > 0 && ( */}
-            {0 > 0 && ( // temporary (replace with real cart)
+            {0 > 0 && (
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 {0}
               </span>
