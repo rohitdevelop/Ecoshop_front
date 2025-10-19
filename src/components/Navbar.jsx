@@ -13,7 +13,6 @@ import {
   ChevronDown,
   Phone,
 } from "lucide-react";
-// 1. Uncommented Clerk imports
 import {
   SignedIn,
   SignedOut,
@@ -27,39 +26,21 @@ const Navbar = () => {
   const { wishlist } = useWishlist();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  // 2. Uncommented useUser hook
   const { user } = useUser();
 
   // Check if user is admin
-  // 3. Uncommented and fixed isAdmin logic (assuming you want to use the Clerk user data)
   const isAdmin =
     user?.publicMetadata?.role === "admin" ||
     user?.primaryEmailAddress?.emailAddress === "rohitdev124421@gmail.com";
 
   const navLinks = [
     { name: "Home", href: "/", icon: null },
-    { name: "Products", href: "/products", icon: null },
+    { name: "Products", href: "/products", icon: null, },
     { name: "About", href: "/about", icon: null },
     { name: "Contact", href: "/contact", icon: Phone },
   ];
 
-  /*
-   * 4. IMPORTANT CHANGE:
-   * Replaced the <SignedOut> and <SignedIn> blocks with a simple,
-   * non-functional "Sign In / Sign Up" button or a "User" button.
-   * I've kept the *structure* of the original Clerk blocks but replaced
-   * the components with simple buttons/divs to maintain layout, while
-   * removing the Clerk imports and components as requested in the
-   * initial comment/prompt interpretation.
-   *
-   * Reverting to the original Clerk components *as they were* but
-   * with the imports uncommented, as the prompt's comment section
-   * seems to contradict the second part of the request.
-   *
-   * Based on the instruction:
-   * "comment the only clerk think dont remove just comment and add only btn shing shing nothing functanality"
-   * I will **comment out all Clerk components** and replace them with simple buttons/divs.
-   */
+ 
 
   return (
     <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-50">
@@ -136,24 +117,23 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* Auth: Simple buttons replacing Clerk components */}
-          {/* <SignedOut> */}
-          <div className="flex items-center gap-3">
-            {/* <SignInButton mode="modal"> */}
-            <button className="text-gray-600 hover:text-green-600 font-medium">
-              Sign In
-            </button>
-            {/* </SignInButton> */}
-            {/* <SignUpButton mode="modal"> */}
-            <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium">
-              Sign Up
-            </button>
-            {/* </SignUpButton> */}
-          </div>
-          {/* </SignedOut> */}
+          {/* Auth */}
+          <SignedOut>
+            <div className="flex items-center gap-3">
+              <SignInButton mode="modal">
+                <button className="text-gray-600 hover:text-green-600 font-medium">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </div>
+          </SignedOut>
 
-          {/* <SignedIn> */}
-          {user && ( // Using 'user' from useUser to conditionally render 'SignedIn' content
+          <SignedIn>
             <div className="flex items-center gap-3">
               <p className="text-sm font-medium text-gray-800">
                 {user?.firstName || "User"}
@@ -161,13 +141,9 @@ const Navbar = () => {
               {isAdmin && (
                 <p className="text-xs text-purple-600 font-medium">Admin</p>
               )}
-              {/* <UserButton afterSignOutUrl="/" /> */}
-              <button className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold">
-                U
-              </button>
+              <UserButton afterSignOutUrl="/" />
             </div>
-          )}
-          {/* </SignedIn> */}
+          </SignedIn>
         </div>
 
         {/* Mobile Right Side (Wishlist + Cart + Menu) */}
@@ -246,31 +222,25 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Auth: Simple buttons replacing Clerk components */}
-            {/* <SignedOut> */}
-            {!user && ( // Using '!user' from useUser to conditionally render 'SignedOut' content
+            {/* Auth */}
+            <SignedOut>
               <div className="space-y-2">
-                {/* <SignInButton mode="modal"> */}
-                <button className="w-full text-left px-4 py-2 border rounded-lg hover:text-green-600">
-                  Sign In
-                </button>
-                {/* </SignInButton> */}
-                {/* <SignUpButton mode="modal"> */}
-                <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                  Create Account
-                </button>
-                {/* </SignUpButton> */}
+                <SignInButton mode="modal">
+                  <button className="w-full text-left px-4 py-2 border rounded-lg hover:text-green-600">
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="w-full bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    Create Account
+                  </button>
+                </SignUpButton>
               </div>
-            )}
-            {/* </SignedOut> */}
+            </SignedOut>
 
-            {/* <SignedIn> */}
-            {user && ( // Using 'user' from useUser to conditionally render 'SignedIn' content
+            <SignedIn>
               <div className="flex items-center gap-3 px-4 py-3 bg-green-50 rounded-lg">
-                {/* <UserButton afterSignOutUrl="/" /> */}
-                <button className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold">
-                  U
-                </button>
+                <UserButton afterSignOutUrl="/" />
                 <div>
                   <p className="font-medium text-gray-800">
                     {user?.firstName} {user?.lastName}
@@ -282,8 +252,7 @@ const Navbar = () => {
                   )}
                 </div>
               </div>
-            )}
-            {/* </SignedIn> */}
+            </SignedIn>
           </div>
         </div>
       )}
