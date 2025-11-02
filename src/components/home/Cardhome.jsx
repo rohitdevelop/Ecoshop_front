@@ -57,6 +57,14 @@ const Cardhome = () => {
         </div>
       </section>
 
+
+
+
+
+
+
+
+
        <section className="relative h-[70vh] flex items-center justify-center">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
@@ -78,6 +86,12 @@ const Cardhome = () => {
           </p>
         </div>
       </section>
+
+
+
+
+
+
 
       {/* Ratings Section */}
       <section className="py-12 bg-gray-50">

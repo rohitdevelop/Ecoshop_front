@@ -3,7 +3,8 @@ import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useWishlist } from "@/Context/WishlistContext";
-
+import Link from "next/link";
+ 
 const Category2 = () => {
   const { wishlist, toggleWishlist } = useWishlist();
   const carouselRef = useRef(null);
@@ -16,7 +17,6 @@ const Category2 = () => {
         const res = await fetch(
           // "http://localhost:4000/personalBodyCareProducts"
           "https://ecoshop-back.onrender.com/personalBodyCareProducts"
-
         );
 
         if (!res.ok) {
@@ -60,9 +60,11 @@ const Category2 = () => {
             </p>
           </div>
         </div>
-        <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
-          View all <ChevronRight size={18} />
-        </button>
+        <Link href={"/products"}>
+          <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
+            View all <ChevronRight size={18} />
+          </button>
+        </Link>
       </div>
 
       {/* ✅ Carousel Section */}
@@ -113,9 +115,11 @@ const Category2 = () => {
                 </p>
 
                 {/* ✅ Explore Button */}
-                <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
-                  Explore
-                </button>
+                <Link href={"/products"}>
+                  <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
+                    Explore
+                  </button>
+                </Link>
               </div>
             );
           })}

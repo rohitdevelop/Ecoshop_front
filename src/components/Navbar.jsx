@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useWishlist } from "@/Context/WishlistContext";
+
+// FIX 1: Corrected the import path and hook name to the convention we established:
+import { useCart } from "@/Context/Cardcontext"; 
+
 import {
   Heart,
   ShoppingCart,
@@ -24,9 +28,15 @@ import {
 
 const Navbar = () => {
   const { wishlist } = useWishlist();
+  // FIX 2: Destructure the 'cart' state from the corrected hook.
+  const { cart } = useCart(); 
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user } = useUser(); // Hook provided by Clerk
+
+  // Calculate total items in cart (sum of quantities)
+  const totalCartItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   // Check if user is admin
   const isAdmin =
@@ -52,7 +62,7 @@ const Navbar = () => {
           </div>
         </Link>
 
-        {/* Desktop Menu */}
+        {/* Desktop Menu (omitting for brevity) */}
         <div className="hidden lg:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
@@ -100,22 +110,20 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* Cart */}
+          {/* Cart - FIX 3: Use totalCartItems for count */}
           <Link
             href="/cart"
             className="relative p-2 text-gray-600 hover:text-green-600"
           >
             <ShoppingCart className="w-5 h-5" />
-            {/* replace with cart.length if you have cart context */}
-            {/* {cart.length > 0 && ( */}
-            {0 > 0 && (
+            {totalCartItems > 0 && (
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {0}
+                {totalCartItems}
               </span>
             )}
           </Link>
 
-          {/* Auth */}
+          {/* Auth (omitting for brevity) */}
           <SignedOut>
             <div className="flex items-center gap-3">
               <SignInButton mode="modal">
@@ -146,7 +154,7 @@ const Navbar = () => {
 
         {/* Mobile Right Side (Wishlist + Cart + Menu) */}
         <div className="flex items-center gap-3 lg:hidden">
-          {/* Wishlist */}
+          {/* Wishlist (omitting for brevity) */}
           <Link
             href="/wishlist"
             className="relative p-2 text-gray-600 hover:text-red-500"
@@ -159,20 +167,20 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* Cart */}
+          {/* Cart - FIX 3: Use totalCartItems for count */}
           <Link
             href="/cart"
             className="relative p-2 text-gray-600 hover:text-green-600"
           >
             <ShoppingCart className="w-5 h-5" />
-            {0 > 0 && (
+            {totalCartItems > 0 && (
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {0}
+                {totalCartItems}
               </span>
             )}
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button (omitting for brevity) */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 text-gray-600 hover:text-green-600"
@@ -186,7 +194,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (omitting for brevity) */}
       {isMenuOpen && (
         <div className="lg:hidden bg-white border-t shadow-md">
           <div className="px-4 py-4 space-y-3">
@@ -220,7 +228,7 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Auth */}
+            {/* Auth (omitting for brevity) */}
             <SignedOut>
               <div className="space-y-2">
                 <SignInButton mode="modal">

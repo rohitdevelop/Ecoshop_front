@@ -1,46 +1,44 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
- import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useWishlist } from "@/Context/WishlistContext";
-
+ import Link from "next/link";
 const Category1 = () => {
   // 🧺 Wishlist context to handle likes
   const { wishlist, toggleWishlist } = useWishlist();
-
-  // 🌀 useRef to store carousel elements for scrolling
+   // 🌀 useRef to store carousel elements for scrolling
   const carouselRef = useRef(null);
 
   // 📦 State to store fetched products
   const [products, setProducts] = useState([]);
 
   // 🚀 Fetch top 4 Home & Kitchen products
-useEffect(() => {
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(
-        // "http://localhost:4000/homeKitchenProducts"
-        "https://ecoshop-back.onrender.com/homeKitchenProducts"
-      );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          // "http://localhost:4000/homeKitchenProducts"
+          "https://ecoshop-back.onrender.com/homeKitchenProducts"
+        );
 
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP Error! Status: ${response.status}`);
+        }
+
+        // Parse JSON safely
+        const json = await response.json();
+
+        const productsArray = json?.data || [];
+        setProducts(productsArray.slice(0, 4));
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        alert("Could not fetch products. Please check your API.");
       }
+    };
 
-      // Parse JSON safely
-      const json = await response.json();
-
-      const productsArray = json?.data || [];
-      setProducts(productsArray.slice(0, 4));
-    } catch (err) {
-      console.error("Error fetching products:", err);
-      alert("Could not fetch products. Please check your API.");
-    }
-  };
-
-  fetchProducts();
-}, []);
-
+    fetchProducts();
+  }, []);
 
   // 🧭 Carousel scroll handler
   const scrollCarousel = (direction) => {
@@ -58,9 +56,11 @@ useEffect(() => {
       {/* Heading */}
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-2xl font-bold">Home & Kitchen</h3>
-        <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
-          View all <ChevronRight size={18} />
-        </button>
+        <Link href={"/products"}>
+          <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
+            View all <ChevronRight size={18} />
+          </button>
+        </Link>
       </div>
 
       {/* Carousel */}
@@ -116,9 +116,11 @@ useEffect(() => {
                 </p>
 
                 {/* Explore Button */}
-                <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
-                  Explore
-                </button>
+                <Link href={"/products"}>
+                  <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
+                    Explore
+                  </button>
+                </Link>
               </div>
             );
           })}

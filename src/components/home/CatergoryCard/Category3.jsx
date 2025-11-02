@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useWishlist } from "@/Context/WishlistContext";
+import Link from "next/link";
 
 const Category3 = () => {
   const { wishlist, toggleWishlist } = useWishlist();
@@ -58,9 +59,11 @@ const Category3 = () => {
             </p>
           </div>
         </div>
-        <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
-          View all <ChevronRight size={18} />
-        </button>
+        <Link href={"/products"}>
+          <button className="hidden sm:flex items-center gap-2 text-green-800 font-bold">
+            View all <ChevronRight size={18} />
+          </button>
+        </Link>
       </div>
 
       {/* ✅ Carousel */}
@@ -106,9 +109,11 @@ const Category3 = () => {
                 </p>
 
                 {/* ✅ Explore Button */}
-                <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
-                  Explore
-                </button>
+                <Link href={"/products"}>
+                  <button className="mt-4 w-full bg-green-600 text-white py-2 cursor-pointer rounded-lg font-medium hover:bg-green-700 transition">
+                    Explore
+                  </button>
+                </Link>
               </div>
             );
           })}
