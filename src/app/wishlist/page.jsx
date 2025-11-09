@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { Heart, ShoppingBag, X } from "lucide-react";
+import Link from "next/link";
 
 const Wishlist = () => {
   const { isSignedIn, user } = useUser();
@@ -24,44 +25,34 @@ const Wishlist = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 mt-12">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              {user?.firstName}'s Wishlist
-            </h1>
-            <p className="text-gray-600">Your favorite items, saved for later</p>
-          </div>
-
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 mt-12 flex flex-col items-center justify-center">
+        <div className="max-w-5xl w-full mx-auto px-4 py-12 flex flex-col items-center">
           {wishlist.length === 0 ? (
             /* Empty State */
-            <div className="text-center py-16">
-              <div className="bg-white rounded-2xl shadow-lg p-12 max-w-md mx-auto">
-                <div className="w-20 h-20 bg-gradient-to-r from-pink-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Heart size={40} className="text-red-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            <div className="text-center py-16 w-full max-w-xl">
+              <div className="w-full bg-white p-10 rounded-xl shadow-lg border border-gray-200 text-center">
+                <Heart className="w-16 h-16 text-red-700 mx-auto mb-6 opacity-70" />
+                <h1 className="text-3xl font-semibold text-gray-800 mb-2">
                   Your wishlist is empty
-                </h3>
-                <p className="text-gray-500 mb-6">
+                </h1>
+                <p className="text-lg text-gray-500 mb-6">
                   Start adding items you love to see them here
                 </p>
-                <button
-                  onClick={() => router.push("/")}
-                  className="bg-gradient-to-r from-green-500 to-green-200 text-black px-6 py-3 rounded-full hover:from-red-600 hover:to-pink-600 transition-all duration-200 font-medium"
+                <Link
+                  href="/products"
+                  className="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-md active:scale-95"
                 >
-                  Start Shopping
-                </button>
+                  Start Shopping Now
+                </Link>
               </div>
             </div>
           ) : (
             /* Wishlist Items */
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-center justify-items-center">
               {wishlist.map((item) => (
                 <div
                   key={item.id}
-                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group"
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group w-[260px]"
                 >
                   <div className="relative">
                     <Image
@@ -79,7 +70,7 @@ const Wishlist = () => {
                     </button>
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
                   </div>
-                  
+
                   <div className="p-5">
                     <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-1">
                       {item.name}
@@ -90,7 +81,7 @@ const Wishlist = () => {
                     <p className="text-sm text-gray-500 line-clamp-2 mb-4">
                       {item.description}
                     </p>
-                    
+
                     <div className="flex gap-2">
                       <button className="flex-1 bg-gradient-to-r from-green-500 to-green-500 text-white py-2.5 px-4 rounded-xl hover:bg-green-700 transition-all duration-200 font-medium flex items-center justify-center gap-2">
                         <ShoppingBag size={16} />
@@ -109,12 +100,13 @@ const Wishlist = () => {
               ))}
             </div>
           )}
-          
+
           {/* Items Count */}
           {wishlist.length > 0 && (
             <div className="text-center mt-8">
               <p className="text-gray-600">
-                {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'} in your wishlist
+                {wishlist.length} {wishlist.length === 1 ? "item" : "items"} in
+                your wishlist
               </p>
             </div>
           )}

@@ -1,97 +1,86 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ShoppingCart, Heart, Leaf, Star, ChevronLeft } from "lucide-react";
+import {
+  ShoppingCart,
+  Heart,
+  Leaf,
+  Star,
+  ChevronLeft,
+  Trash2,
+  ArrowRight,
+} from "lucide-react";
 import Navbar from "../../../components/Navbar";
 import Footer from "../../../components/Footer";
 import { useWishlist } from "@/Context/WishlistContext";
+import { useCart } from "@/Context/Cardcontext";
 
-/**
- * ProductDetail Component
- * Displays detailed information about a single product
- * with image gallery, specifications, and purchase options
- */
 export default function ProductDetail() {
-  // ============================
-  // ROUTING & PARAMETERS
-  // ============================
-  
   const params = useParams();
+  const router = useRouter();
   const id = params?.id;
 
-  // ============================
-  // STATE MANAGEMENT
-  // ============================
-  
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-  // Get wishlist functions from context
   const { wishlist, toggleWishlist } = useWishlist();
+  const { card, removeFromCart, addToCart } = useCart();
 
-  // ============================
-  // DATA FETCHING
-  // ============================
-  
-  /**
-   * Fetch product details from API when component mounts or ID changes
-   */
   useEffect(() => {
-    // Validate ID before fetching
     if (!id) {
       setLoading(false);
       setError("Invalid product ID.");
       return;
     }
 
-    // Reset states for new product
     setProduct(null);
     setLoading(true);
     setError(null);
 
     const fetchProduct = async () => {
       try {
-        // FIXED: Template literal was not being interpolated correctly
         const response = await fetch(
           `https://ecoshop-back.onrender.com/dumyproducts/${id}`
         );
 
-        // Handle 404 - Product not found
         if (response.status === 404) {
-          throw new Error("Product not found. It may have been removed or the ID is incorrect.");
+          throw new Error(
+            "Product not found. It may have been removed or the ID is incorrect."
+          );
         }
 
-        // Handle other HTTP errors
         if (!response.ok) {
-          throw new Error(`Server error: ${response.status}. Please try again later.`);
+          throw new Error(
+            `Server error: ${response.status}. Please try again later.`
+          );
         }
 
         const data = await response.json();
         const fetchedProduct = data.data;
 
-        // Validate fetched data
         if (!fetchedProduct) {
           throw new Error("Product data is missing or empty.");
         }
 
         setProduct(fetchedProduct);
-        
-        // Set the first image as default, with fallback
-        const defaultImage = 
+
+        const defaultImage =
           fetchedProduct.images && fetchedProduct.images.length > 0
             ? fetchedProduct.images[0]
             : "/placeholder-image.jpg";
         setMainImage(defaultImage);
-        
+
         setError(null);
       } catch (err) {
         console.error("Error fetching product:", err);
-        setError(err.message || "Failed to load product details. Please try again.");
+        setError(
+          err.message || "Failed to load product details. Please try again."
+        );
       } finally {
         setLoading(false);
       }
@@ -100,21 +89,73 @@ export default function ProductDetail() {
     fetchProduct();
   }, [id]);
 
-  // ============================
-  // EVENT HANDLERS
-  // ============================
-  
   /**
-   * Handle adding product to shopping cart
+   * Check if product is currently in cart
    */
-  const handleAddToCart = () => {
+  const isProductInCart = () => {
+    if (!product || !Array.isArray(card)) return false;
+    return card.some((item) => String(item.id) === String(product.id));
+  };
+
+  /**
+   * Handle cart toggle: Add or Remove from cart
+   */
+  const handleCartToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!product) return;
-    
-    // TODO: Implement actual cart functionality with context/state management
-    console.log(`Added ${selectedQuantity}x ${product.name} to cart!`);
-    
-    // Optional: Show success notification
-    alert(`Added ${selectedQuantity}x ${product.name} to your cart!`);
+
+    const inCart = isProductInCart();
+
+    if (inCart) {
+      // 🔴 Remove from cart
+      if (removeFromCart) {
+        removeFromCart(product.id);
+      }
+    } else {
+      // 🟢 Add to cart
+      if (addToCart) {
+        const itemToAdd = {
+          ...product,
+          quantity: selectedQuantity,
+        };
+        addToCart(itemToAdd);
+        setSelectedQuantity(1); // Reset after adding
+      }
+    }
+  };
+
+  /**
+   * Handle Buy Now: Add to cart and navigate to cart page
+   */
+  const handleBuyNow = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!product) return;
+
+    const inCart = isProductInCart();
+
+    if (inCart) {
+      // Already in cart, navigate to cart page
+      router.push("/cart");
+    } else {
+      // Add to cart first, then navigate
+      if (addToCart) {
+        const itemToAdd = {
+          ...product,
+          quantity: selectedQuantity,
+        };
+        addToCart(itemToAdd);
+        setSelectedQuantity(1);
+
+        // Small delay to ensure state updates before navigation
+        setTimeout(() => {
+          router.push("/cart");
+        }, 100);
+      }
+    }
   };
 
   /**
@@ -122,8 +163,7 @@ export default function ProductDetail() {
    */
   const handleLikeToggle = () => {
     if (!product) return;
-    
-    // Use context's toggleWishlist function
+
     if (toggleWishlist) {
       toggleWishlist(product);
     } else {
@@ -132,33 +172,17 @@ export default function ProductDetail() {
   };
 
   /**
-   * Handle Buy Now action
-   */
-  const handleBuyNow = () => {
-    if (!product) return;
-    
-    // TODO: Implement checkout flow
-    console.log(`Initiating purchase for ${product.name}`);
-    
-    // Navigate to checkout page
-    // router.push(`/checkout?product=${product.id}&quantity=${selectedQuantity}`);
-  };
-
-  /**
    * Check if current product is in wishlist
    */
   const isProductInWishlist = () => {
-    return Array.isArray(wishlist) && wishlist.some((item) => item.id === product?.id);
+    return (
+      Array.isArray(wishlist) &&
+      wishlist.some((item) => item.id === product?.id)
+    );
   };
 
-  // ============================
-  // UTILITY FUNCTIONS
-  // ============================
-  
   /**
    * Render star rating visualization
-   * @param {number} currentRating - Rating value (0-5)
-   * @returns {JSX.Element} Star rating component
    */
   const renderStars = (currentRating) => {
     const rating = currentRating || 0;
@@ -167,29 +191,24 @@ export default function ProductDetail() {
     const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
     return (
-      <div className="flex items-center" aria-label={`Rating: ${rating.toFixed(1)} out of 5 stars`}>
-        {/* Full Stars */}
+      <div
+        className="flex items-center"
+        aria-label={`Rating: ${rating.toFixed(1)} out of 5 stars`}
+      >
         {[...Array(fullStars)].map((_, i) => (
           <Star
             key={`full-${i}`}
             className="w-4 h-4 fill-yellow-500 text-yellow-500"
           />
         ))}
-        
-        {/* Half Star */}
         {hasHalfStar && (
           <Star
             key="half"
             className="w-4 h-4 fill-yellow-300 text-yellow-300"
           />
         )}
-        
-        {/* Empty Stars */}
         {[...Array(emptyStars)].map((_, i) => (
-          <Star
-            key={`empty-${i}`}
-            className="w-4 h-4 text-gray-300"
-          />
+          <Star key={`empty-${i}`} className="w-4 h-4 text-gray-300" />
         ))}
       </div>
     );
@@ -201,16 +220,16 @@ export default function ProductDetail() {
   const calculateDiscount = () => {
     if (!product?.compareAtPrice || !product?.price) return 0;
     if (product.price >= product.compareAtPrice) return 0;
-    
+
     return Math.round(
       ((product.compareAtPrice - product.price) / product.compareAtPrice) * 100
     );
   };
 
   // ============================
-  // RENDER: LOADING STATE
+  // RENDER: LOADING & ERROR STATES
   // ============================
-  
+
   if (loading) {
     return (
       <>
@@ -226,10 +245,6 @@ export default function ProductDetail() {
     );
   }
 
-  // ============================
-  // RENDER: ERROR STATE
-  // ============================
-  
   if (error || !product) {
     return (
       <>
@@ -260,7 +275,7 @@ export default function ProductDetail() {
   // ============================
   // DESTRUCTURE PRODUCT DATA
   // ============================
-  
+
   const {
     name = "Unnamed Product",
     description = "No description available.",
@@ -276,21 +291,18 @@ export default function ProductDetail() {
 
   const discount = calculateDiscount();
   const isLiked = isProductInWishlist();
+  const inCart = isProductInCart();
 
   // ============================
   // RENDER: MAIN CONTENT
   // ============================
-  
+
   return (
     <>
       <Navbar />
-      
+
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
-          
-          {/* ============================
-              BACK NAVIGATION
-              ============================ */}
           <Link
             href="/products"
             className="inline-flex items-center text-gray-600 hover:text-emerald-600 mb-6 text-sm font-medium transition-colors"
@@ -299,17 +311,9 @@ export default function ProductDetail() {
             Back to All Products
           </Link>
 
-          {/* ============================
-              MAIN PRODUCT CONTAINER
-              ============================ */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-100 grid lg:grid-cols-2 gap-6 md:gap-10 p-4 md:p-8 lg:p-12">
-            
-            {/* ============================
-                LEFT COLUMN: IMAGE GALLERY
-                ============================ */}
+            {/* LEFT COLUMN: IMAGE GALLERY */}
             <div className="flex flex-col">
-              
-              {/* Main Image Display */}
               <div className="relative mb-4 bg-gray-100 rounded-lg overflow-hidden">
                 <img
                   src={mainImage || "/placeholder-image.jpg"}
@@ -320,7 +324,6 @@ export default function ProductDetail() {
                   }}
                 />
 
-                {/* Floating Wishlist Button */}
                 <button
                   onClick={handleLikeToggle}
                   className={`absolute top-3 right-3 p-3 rounded-full transition-all duration-200 shadow-lg focus:outline-none focus:ring-2 ${
@@ -328,7 +331,9 @@ export default function ProductDetail() {
                       ? "bg-red-500 text-white hover:bg-red-600 focus:ring-red-300 scale-110"
                       : "bg-white/90 backdrop-blur-sm text-gray-600 hover:bg-white focus:ring-gray-300"
                   }`}
-                  aria-label={isLiked ? "Remove from wishlist" : "Add to wishlist"}
+                  aria-label={
+                    isLiked ? "Remove from wishlist" : "Add to wishlist"
+                  }
                 >
                   <Heart
                     className={`w-6 h-6 transition-transform ${
@@ -337,7 +342,6 @@ export default function ProductDetail() {
                   />
                 </button>
 
-                {/* Featured Badge */}
                 {featured && (
                   <div className="absolute top-3 left-3 bg-emerald-600 text-white text-xs px-3 py-1 rounded-full flex items-center shadow-md">
                     <Leaf className="w-3 h-3 mr-1" />
@@ -346,7 +350,6 @@ export default function ProductDetail() {
                 )}
               </div>
 
-              {/* Image Gallery Thumbnails */}
               {images.length > 1 && (
                 <div className="flex gap-3 overflow-x-auto pb-2 px-1">
                   {images.map((img, index) => (
@@ -373,22 +376,16 @@ export default function ProductDetail() {
               )}
             </div>
 
-            {/* ============================
-                RIGHT COLUMN: PRODUCT INFO
-                ============================ */}
+            {/* RIGHT COLUMN: PRODUCT INFO */}
             <div className="pt-2 flex flex-col">
-              
-              {/* Category Badge */}
               <p className="text-sm font-medium text-emerald-600 uppercase tracking-widest mb-2">
                 {category}
               </p>
 
-              {/* Product Title */}
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
                 {name}
               </h1>
 
-              {/* Rating and Reviews Section */}
               <div className="flex items-center mb-6 pb-4 border-b border-gray-200">
                 {renderStars(rating)}
                 <span className="text-gray-700 text-sm font-medium ml-2">
@@ -399,7 +396,6 @@ export default function ProductDetail() {
                 </span>
               </div>
 
-              {/* Price Section */}
               <div className="mb-8">
                 <p className="text-sm text-gray-500 mb-2 uppercase tracking-wide">
                   Price
@@ -408,7 +404,7 @@ export default function ProductDetail() {
                   <span className="text-4xl font-bold text-emerald-700">
                     ${price.toFixed(2)}
                   </span>
-                  
+
                   {compareAtPrice && discount > 0 && (
                     <>
                       <span className="text-xl text-gray-400 line-through">
@@ -424,12 +420,17 @@ export default function ProductDetail() {
 
               {/* Quantity Selector */}
               <div className="mb-6">
-                <label htmlFor="quantity" className="text-sm text-gray-700 font-medium mb-2 block">
+                <label
+                  htmlFor="quantity"
+                  className="text-sm text-gray-700 font-medium mb-2 block"
+                >
                   Quantity
                 </label>
                 <div className="flex items-center gap-3">
                   <button
-                    onClick={() => setSelectedQuantity(Math.max(1, selectedQuantity - 1))}
+                    onClick={() =>
+                      setSelectedQuantity(Math.max(1, selectedQuantity - 1))
+                    }
                     className="w-10 h-10 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors font-semibold"
                     aria-label="Decrease quantity"
                   >
@@ -448,7 +449,9 @@ export default function ProductDetail() {
                     className="w-16 h-10 text-center border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                   <button
-                    onClick={() => setSelectedQuantity(Math.min(99, selectedQuantity + 1))}
+                    onClick={() =>
+                      setSelectedQuantity(Math.min(99, selectedQuantity + 1))
+                    }
                     className="w-10 h-10 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors font-semibold"
                     aria-label="Increase quantity"
                   >
@@ -460,29 +463,44 @@ export default function ProductDetail() {
               {/* Action Buttons */}
               <div className="sticky bottom-0 bg-white pt-4 pb-2 -mx-4 sm:m-0 sm:p-0 sm:static border-t sm:border-t-0 border-gray-200">
                 <div className="flex flex-col sm:flex-row gap-3 px-4 sm:px-0">
-                  
-                  {/* Add to Cart Button */}
+                  {/* ADD TO CART BUTTON */}
                   <button
-                    onClick={handleAddToCart}
-                    className="flex-1 flex items-center justify-center space-x-2 bg-emerald-600 text-white font-semibold py-3.5 rounded-lg hover:bg-emerald-700 transition-all duration-200 shadow-md active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    onClick={handleCartToggle}
+                    aria-label={inCart ? "Remove from cart" : "Add to cart"}
+                    className={`flex-1 flex items-center justify-center space-x-2 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 active:scale-[0.98] shadow-md ${
+                      inCart
+                        ? "bg-red-500 text-white hover:bg-red-600 focus:ring-red-400"
+                        : "bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500"
+                    }`}
                   >
-                    <ShoppingCart className="w-5 h-5" />
-                    <span>Add to Cart</span>
+                    {inCart ? (
+                      <>
+                        <X className="w-5 h-5" />
+                        <span>Remove from Cart</span>
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-5 h-5" />
+                        <span>
+                          {selectedQuantity > 1
+                            ? `Add ${selectedQuantity} Items`
+                            : "Add to Cart"}
+                        </span>
+                      </>
+                    )}
                   </button>
 
-                  {/* Buy Now Button */}
+                  {/* BUY NOW BUTTON */}
                   <button
                     onClick={handleBuyNow}
-                    className="flex-1 flex items-center justify-center space-x-2 bg-emerald-100 text-emerald-700 border-2 border-emerald-300 font-semibold py-3.5 rounded-lg hover:bg-emerald-200 transition-all duration-200 shadow-sm active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="flex-1 flex items-center justify-center space-x-2 bg-emerald-100 text-emerald-700 px-6 py-3 rounded-lg text-sm font-semibold hover:bg-emerald-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 active:scale-[0.98] border-2 border-emerald-300 shadow-md"
                   >
                     <span>Buy Now</span>
                   </button>
                 </div>
               </div>
 
-              {/* ============================
-                  PRODUCT DESCRIPTION
-                  ============================ */}
+              {/* PRODUCT DESCRIPTION */}
               <div className="mt-8 border-t border-gray-200 pt-6">
                 <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
                   <Leaf className="w-5 h-5 mr-2 text-emerald-600" />
@@ -493,9 +511,7 @@ export default function ProductDetail() {
                 </p>
               </div>
 
-              {/* ============================
-                  SPECIFICATIONS
-                  ============================ */}
+              {/* SPECIFICATIONS */}
               {Object.keys(specifications).length > 0 && (
                 <div className="mt-8 border-t border-gray-200 pt-6">
                   <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -505,7 +521,9 @@ export default function ProductDetail() {
                   <ul className="text-base text-gray-600 space-y-3 grid sm:grid-cols-2 gap-x-6">
                     {Object.entries(specifications).map(([key, value]) => (
                       <li key={key} className="flex items-start">
-                        <span className="text-emerald-500 font-bold mr-2 mt-1">•</span>
+                        <span className="text-emerald-500 font-bold mr-2 mt-1">
+                          •
+                        </span>
                         <div>
                           <span className="font-medium text-gray-700">
                             {key.replace(/([A-Z])/g, " $1").trim()}:

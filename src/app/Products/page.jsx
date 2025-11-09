@@ -17,8 +17,7 @@ import {
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useWishlist } from "@/Context/WishlistContext";
-import { useCart } from "@/Context/Cardcontext"; // Corrected to Cartcontext and assumed it provides removeFromCart
-
+import { useCart } from "@/Context/Cardcontext";  
 /**
  * ProductsPage Component
  * Displays a filterable, sortable grid/list of eco-friendly products
